@@ -7,11 +7,19 @@
 <script>
 import BaseHeader from "src/components/layouts/BaseHeader.vue";
 import BaseFooter from "src/components/layouts/BaseFooter.vue";
+import userAuth from "src/auth/userauth";
+
 export default {
   name: "app",
+  mixins: [userAuth],
   components: {
     BaseHeader,
     BaseFooter,
+  },
+  watch: {
+    $route: async function (to, from) {
+      await this.refreshUserInfo();
+    },
   },
 };
 </script>

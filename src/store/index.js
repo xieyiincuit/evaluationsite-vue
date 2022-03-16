@@ -1,11 +1,13 @@
 import { createStore, createLogger } from 'vuex'
-import articles from './modules/evluation-service'
+import articles from './modules/evluation'
+import identity from './modules/identity'
 
 const debug = process.env.NODE_ENV !== 'production'
 
-const store =  createStore({
+const store = createStore({
   modules: {
-    articles
+    articles,
+    identity
   },
   strict: debug,
   plugins: debug ? [createLogger()] : []

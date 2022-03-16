@@ -1,5 +1,6 @@
 <template>
-  <footer class="bg-dark text-center text-white">
+  <div class="clear"></div>
+  <footer class="bg-dark text-center text-white fixed-bottom">
     <!-- Grid container -->
 
     <div class="text-center p-3">
@@ -22,5 +23,9 @@ footer {
 .poweredBy {
   font-size: 15;
   font-style: italic;
+}
+.clear {
+  clear: both;
+  height: 80px;
 }
 </style>

@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.1",
+    "axios": "^0.26.1",
     "element-plus": "^2.0.2",
     "mdb-ui-kit": "^3.11.0",
+    "oidc-client": "^1.11.5",
     "vue": "^3.2.31",
     "vue-router": "^4.0.13",
     "vuex": "^4.0.2"
