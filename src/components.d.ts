@@ -11,6 +11,7 @@ declare module 'vue' {
     BaseHeader: typeof import('./components/layouts/BaseHeader.vue')['default']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElPagination: typeof import('element-plus/es')['ElPagination']
+    Loading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }
 

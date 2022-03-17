@@ -2,11 +2,7 @@
   <div class="card">
     <div class="card-header">新游评分排行榜</div>
     <ul class="list-group list-group-flush">
-      <li
-        class="list-group-item scope-list"
-        v-for="(article, index) in rankArticles"
-        :key="article.id"
-      >
+      <li class="list-group-item scope-list" v-for="(article, index) in rankArticles" :key="article.id">
         <div class="d-flex justify-content-between">
           <span class="rank-num">{{ index + 1 }}</span>
           <span class="rank-title text-start">{{ article.name }}</span>

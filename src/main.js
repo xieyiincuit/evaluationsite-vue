@@ -8,6 +8,7 @@ import "~/styles/index.scss";
 
 // If you want to use ElMessage, import it.
 import "element-plus/theme-chalk/src/message.scss"
+import "@element-plus/icons-vue"
 
 // install MDB UI KIT in your project
 import * as mdb from 'mdb-ui-kit'; // lib

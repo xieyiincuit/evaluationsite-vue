@@ -1,6 +1,6 @@
 //initial state
 const state = () => ({
-    typeList: []
+    typeList: [],
 })
 
 //getters
@@ -23,7 +23,7 @@ const actions = {
 const mutations = {
     saveTypeList(state, types) {
         state.typeList = types
-    }
+    },
 }
 
 export default {
