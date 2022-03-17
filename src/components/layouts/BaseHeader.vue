@@ -32,7 +32,7 @@
         <!-- Left links -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link to="/" class="nav-link active">测评首页</router-link>
+            <router-link to="/" class="nav-link active">测评专栏</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/game" class="nav-link">去找游戏</router-link>
@@ -55,7 +55,7 @@
           </button>
           <a
             role="button"
-            href="http://localhost:50005/Account/Register"
+            href="http://localhost:5005/Account/Register"
             class="btn btn-outline-info me-3 font-btn"
             v-show="user == null"
           >

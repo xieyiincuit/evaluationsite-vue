@@ -22,6 +22,7 @@ export default defineConfig({
       src: path.resolve(__dirname, 'src'),
       assets: path.resolve(__dirname, 'src/assets'),
       '/pic': 'src/assets/images/pic',
+      '/description-default.jpg': 'src/assets/images/pic/csgo.png'
     },
   },
   css: {

@@ -14,13 +14,11 @@ import * as mdb from 'mdb-ui-kit'; // lib
 import 'mdb-ui-kit/css/mdb.min.css' // scss
 
 // Import apis
-import evalapi from "~/apis/evaluation-api.js"
-import idsapi from "~/apis/identity-api.js"
+import http from "~/apis/http.js"
 
 const app = createApp(App);
 
-app.config.globalProperties.$evalapi = evalapi;
-app.config.globalProperties.$idsapi = idsapi;
+app.config.globalProperties.$http = http;
 
 app.use(router)
 app.use(store)

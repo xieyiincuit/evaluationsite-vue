@@ -1,10 +1,9 @@
 import axios from 'axios'
-import console from 'console';
 import store from '../store/index'
 
 //异步请求默认超时时间设为10s
 axios.defaults.timeout = 10000
-axios.defaults.baseURL = 'http://localhost:20000/v1'
+axios.defaults.baseURL = 'http://localhost:20000'
 
 // 自定义判断元素类型JS
 function toType(obj) {
@@ -34,7 +33,7 @@ function filterNull(o) {
 var requestStore = store
 axios.interceptors.request.use(
     config => {
-        console.log(config.params)
+        console.log("request interceptors log  | url:" + config.url, " method:" + config.method, " params:" + config.params)
         if (requestStore.state.token) {
             // 判断是否存在token，如果存在的话，则每个http header都加上token
             config.headers.Authorization = "Bearer " + requestStore.state.token;
@@ -74,7 +73,6 @@ function apiAxios(method, url, params, success, failure) {
         url: url,
         data: method === "POST" || method === "PUT" ? params : null,
         params: method === "GET" || method === "DELETE" ? params : null,
-        baseURL: root,
         // `headers` 是即将被发送的自定义请求头
         withCredentials: false
     })
@@ -82,10 +80,8 @@ function apiAxios(method, url, params, success, failure) {
             success(res.data);
         })
         .catch(function (err) {
-            let res = err.response;
             if (err) {
-                window.alert("api error, HTTP CODE: " + res.status);
-                console.log('err message: ', err)
+                console.log("api error, HTTP message: " + err);
             }
         });
 }

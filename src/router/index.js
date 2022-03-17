@@ -13,6 +13,12 @@ import applicationUserManager from "../auth/applicationusermanager";
 const routes = [
     {
         path: '/',
+        redirect: {
+            name: 'home'
+        }
+    },
+    {
+        path: '/articles',
         name: 'home',
         component: ArticlesView
     },

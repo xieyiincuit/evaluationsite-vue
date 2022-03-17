@@ -1,20 +1,47 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "target": "esnext",
-    "useDefineForClassFields": true,
     "module": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
+    "strict": false,
     "jsx": "preserve",
-    "sourceMap": true,
-    "resolveJsonModule": true,
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     },
-    "skipLibCheck": true
+    "lib": [
+      "esnext",
+      "dom",
+      "es5",
+      "es6",
+      "es7",
+      "es2015.promise",
+      "dom.iterable",
+      "scripthost"
+    ],
+    "typeRoots": [
+      "./types",
+      "./node_modules/vue/types"
+    ]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/main.js"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "src/api/http.ts",
+    "src/Auth/applicationusermanager.js",
+    "src/Auth/UserAuth.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

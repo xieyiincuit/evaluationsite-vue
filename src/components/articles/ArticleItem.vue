@@ -1,28 +1,28 @@
 <template>
   <div class="card">
-    <div class="row g-0 mb-3" v-for="i in 5" :key="i">
-      <h5 class="card-header text-white bg-dark">网游测评</h5>
+    <div
+      class="row g-0 mb-3"
+      v-for="article in articles"
+      :key="article.articleId"
+    >
+      <h5 class="card-header text-white bg-dark">
+        {{ article.categoryName }}
+      </h5>
+
       <div class="col-md-3">
-        <img :src="imageUrl" alt="csgo" class="card-image" />
+        <img :src="article.descriptionImage" alt="csgo" class="card-image" />
       </div>
       <div class="col-md-9 col-sm-12">
         <div class="card-body">
           <h5 class="card-title over-flow-title">
-            《Counter-Strike: Global Offensive》: 一款紧张刺激的团队竞技 FPS
-            经典作品
+            《{{ article.gameName }}》: {{ article.title }}
           </h5>
           <p class="card-text over-flow-content">
-            Counter-Strike: Global Offensive (CS:GO) is a multiplayer
-            first-person shooter developed by Valve and Hidden Path
-            Entertainment. It is the fourth game in the Counter-Strike series.
-            Developed for over two years, Global Offensive was released for
-            Windows, macOS, Xbox 360, and PlayStation 3 in August 2012, and for
-            Linux in 2014. Valve still regularly updates the game, both with
-            smaller balancing patches and larger content additions.
+            {{ article.description }}
           </p>
           <div class="d-flex justify-content-between align-items-end">
-            <p>作者: {{ author }}</p>
-            <p>更新时间: {{ currentDateTime() }}</p>
+            <p>作者: {{ article.author }}</p>
+            <p>时间: {{ formatCreateTime(article) }}</p>
 
             <p>
               <svg
@@ -45,7 +45,7 @@
                     d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"
                   ></path>
                 </g></svg
-              >: {{ viewNums }}
+              >: 578
             </p>
             <p>
               <svg
@@ -68,7 +68,7 @@
                     d="M2.165 15.803l.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z"
                   ></path>
                 </g></svg
-              >: {{ commentNums }}
+              >: {{ article.commentsCount }}
             </p>
             <a href="#" class="btn btn-outline-success btn-rounded">查看全文</a>
           </div>
@@ -79,28 +79,75 @@
 </template>
 
 <script>
+import util from "../../utils/date";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      author: "ZhouSL",
-      viewNums: "1002",
-      commentNums: "43",
-      imageUrl: "src/assets/images/pic/csgo.png",
+      categoryId: null,
+      currentPage: 1,
+      articles: [],
     };
   },
+  computed: {
+    // 使用对象展开运算符将 getter 混入 computed 对象中
+    // 使用属性访问方式无法访问（目前不知道原因）
+    ...mapGetters("articles", {
+      typeMap: "categoryMap",
+    }),
+  },
   methods: {
-    currentDateTime() {
-      const current = new Date();
-      const date =
-        current.getFullYear() +
-        "-" +
-        (current.getMonth() + 1) +
-        "-" +
-        current.getDate();
-      const time = current.getHours() + ":" + current.getMinutes();
-      const dateTime = date + " " + time;
-
-      return dateTime;
+    formatCreateTime: function (row) {
+      return !row.createTime || row.createTime == ""
+        ? ""
+        : util.formatDate.format(new Date(row.createTime), "yyyy-MM-dd");
+    },
+    getArticles() {
+      if (this.$route.query.pageIndex) {
+        this.currentPage = pageIndex;
+      }
+      this.categoryId = this.$route.query.categoryId;
+      //若有分类参数
+      if (this.categoryId) {
+        this.$http.get(
+          "v1/e/articles/type?pageIndex=" +
+            this.currentPage +
+            "&categoryId=" +
+            this.categoryId,
+          null,
+          (res) => {
+            this.currentPage = res.currentPage;
+            this.articles = res.data;
+            this.articles.forEach((element) => {
+              var categoryName = this.typeMap.get(element.categoryTypeId);
+              element.categoryName = categoryName;
+            });
+            console.log(res);
+          }
+        );
+      } else {
+        this.$http.get(
+          "v1/e/articles?pageIndex=" + this.currentPage,
+          null,
+          (res) => {
+            this.currentPage = res.currentPage;
+            this.articles = res.data;
+            this.articles.forEach((element) => {
+              var categoryName = this.typeMap.get(element.categoryTypeId);
+              element.categoryName = categoryName;
+            });
+            console.log(res);
+          }
+        );
+      }
+    },
+  },
+  mounted() {
+    this.getArticles();
+  },
+  watch: {
+    $route(to) {
+      this.getArticles();
     },
   },
 };
