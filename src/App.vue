@@ -26,8 +26,6 @@ export default {
 
 <style>
 #app {
-  font: 18px/1.5 "helvetica neue", tahoma, "PingFang SC", "microsoft yahei",
-    arial, "hiragino sans gb", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;

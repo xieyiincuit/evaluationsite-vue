@@ -82,7 +82,7 @@
                 :src="avatar"
                 class="rounded-circle"
                 height="40"
-                alt="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                alt="avatar"
                 loading="lazy"
               />
             </a>
@@ -122,13 +122,13 @@ export default {
       return this.$store.state.identity.role;
     },
     avatar() {
-      if (!this.$store.state.identity.user.avater) {
-        return "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp";
+      const user = this.$store.state.identity.user;
+      if (user) {
+        return user.avatar == "default"
+          ? "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+          : "http://localhost:9000/userinfopic/" + user.avatar;
       }
-      return (
-        "http://localhost:9000/userinfopic/" +
-        this.$store.state.identity.user.avatar
-      );
+      return "";
     },
   },
   methods: {

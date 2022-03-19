@@ -8,8 +8,11 @@ declare module 'vue' {
     ArticleItem: typeof import('./components/articles/article-item.vue')['default']
     ArticleRank: typeof import('./components/articles/article-rank.vue')['default']
     ArticleType: typeof import('./components/articles/article-type.vue')['default']
+    ElBacktop: typeof import('element-plus/es')['ElBacktop']
+    ElPagination: typeof import('element-plus/es')['ElPagination']
     Footer: typeof import('./components/layouts/footer.vue')['default']
     Header: typeof import('./components/layouts/header.vue')['default']
+    Loading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }
 
