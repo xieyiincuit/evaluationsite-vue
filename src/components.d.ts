@@ -4,10 +4,12 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    ArticleBanner: typeof import('./components/articles/article-banner.vue')['default']
     ArticleItem: typeof import('./components/articles/article-item.vue')['default']
     ArticleRank: typeof import('./components/articles/article-rank.vue')['default']
     ArticleType: typeof import('./components/articles/article-type.vue')['default']
+    ContentBanner: typeof import('./components/articles/content-banner.vue')['default']
+    ContentInfo: typeof import('./components/articles/content-info.vue')['default']
+    ContentMain: typeof import('./components/articles/content-main.vue')['default']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElPagination: typeof import('element-plus/es')['ElPagination']
     Footer: typeof import('./components/layouts/footer.vue')['default']

@@ -81,6 +81,7 @@
           </div>
         </div>
       </div>
+      
       <div class="Mid_R">
         <div class="Author_column">
           <div class="ac1">
@@ -133,12 +134,8 @@
 </template>
 
 <script>
-import banner from "../components/articles/article-banner.vue";
-
 export default {
-  components: {
-    banner,
-  },
+  components: {},
   data() {
     return {
       loading: false,

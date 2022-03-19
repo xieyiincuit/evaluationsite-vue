@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '../store/index'
 import ArticlesView from '../views/ArticlesView.vue'
-import ArticleContentView from '../views/ArticleContentView.vue'
+import ArticleView from '../views/ArticleView.vue'
 import ArticleAddView from '../views/ArticleAddView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 
@@ -25,7 +25,7 @@ const routes = [
     {
         path: '/article/:aid',
         name: 'article',
-        component: ArticleContentView,
+        component: ArticleView,
     },
     {
         path: '/article/create',

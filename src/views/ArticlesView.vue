@@ -1,11 +1,16 @@
 <template>
   <div class="container" v-loading.fullscreen.lock="loading">
-    <ArticleType />
+    <div class="row">
+      <div class="col-lg-9 col-md-12 col-sm-12">
+        <ArticleType />
+      </div>
+    </div>
+
     <div class="row mt-3">
-      <div class="col-md-9">
+      <div class="col-md-12 col-lg-9 col-sm-12">
         <ArticleItem :articles="articles" />
       </div>
-      <div class="col-sm-12 col-md-3 mt-sm-3 mt-md-0">
+      <div class="col-sm-12 col-lg-3 col-md-12 mt-sm-3 mt-md-0">
         <ArticleRank />
       </div>
     </div>
