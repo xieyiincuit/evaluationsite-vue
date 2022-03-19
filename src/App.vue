@@ -1,20 +1,20 @@
 <template>
-  <BaseHeader />
+  <Header />
   <router-view></router-view>
-  <BaseFooter />
+  <Footer />
 </template>
 
 <script>
-import BaseHeader from "src/components/layouts/BaseHeader.vue";
-import BaseFooter from "src/components/layouts/BaseFooter.vue";
+import Header from "./components/layouts/header.vue";
+import Footer from "./components/layouts/footer.vue";
 import userAuth from "src/auth/userauth";
 
 export default {
   name: "app",
   mixins: [userAuth],
   components: {
-    BaseHeader,
-    BaseFooter,
+    Header,
+    Footer,
   },
   watch: {
     $route: async function (to, from) {

@@ -79,10 +79,10 @@
               aria-expanded="false"
             >
               <img
-                src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+                :src="avatar"
                 class="rounded-circle"
                 height="40"
-                alt="Black and White Portrait of a Man"
+                alt="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
                 loading="lazy"
               />
             </a>
@@ -120,6 +120,15 @@ export default {
     },
     role() {
       return this.$store.state.identity.role;
+    },
+    avatar() {
+      if (!this.$store.state.identity.user.avater) {
+        return "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp";
+      }
+      return (
+        "http://localhost:9000/userinfopic/" +
+        this.$store.state.identity.user.avatar
+      );
     },
   },
   methods: {

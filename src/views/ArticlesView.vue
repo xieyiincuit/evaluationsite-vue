@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-loading="loading">
+  <div class="container" v-loading.fullscreen.lock="loading">
     <ArticleType />
     <div class="row mt-3">
       <div class="col-md-9">
@@ -30,9 +30,9 @@
 
 <script>
 // @ is an alias to /src
-import ArticleItem from "../components/articles/ArticleItem.vue";
-import ArticleType from "../components/articles/ArticleType.vue";
-import ArticleRank from "../components/articles/ArticleRank.vue";
+import ArticleItem from "../components/articles/article-item.vue";
+import ArticleType from "../components/articles/article-type.vue";
+import ArticleRank from "../components/articles/article-rank.vue";
 import { mapGetters } from "vuex";
 
 export default {
