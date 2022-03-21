@@ -7,7 +7,11 @@
 
       <div class="col-md-3">
         <router-link :to="`/article/${article.articleId}`">
-          <img :src="article.descriptionImage" alt="csgo" class="card-image" />
+          <img
+            :src="'http://localhost:9000/' + article.descriptionImage"
+            alt="csgo"
+            class="card-image"
+          />
         </router-link>
       </div>
       <div class="col-md-9 col-sm-12">
@@ -69,8 +73,8 @@ export default {
 }
 
 .card-image {
-  max-width: 100%;
-  height: 85%;
+  width: 250px;
+  height: 170px;
 }
 
 .btn {

@@ -1,23 +1,25 @@
 <template>
   <div
     class="Top"
-    style="
-      background-image: url(http://localhost:9000/gameinfopic/bigpicture.jpg);
-    "
+    :style="{
+      backgroundImage: 'url(' + bannerInfo.articleImage + ')',
+    }"
   >
     <div class="Top1"></div>
     <div class="Top2">
       <div class="con">
-        <h1 class="tit">《纪元：变异》游民评测8.1分 光刃闪烁的未来之城</h1>
+        <h1 class="tit">《{{ bannerInfo.gameName }}》{{ bannerInfo.title }}</h1>
         <div class="txt"></div>
         <div class="tem">
-          <div class="time">2022-03-17 11:04:57</div>
+          <div class="time">{{ formatTime(editTime) }}</div>
           <div class="visit">
-            <span class="count">10475</span>
+            <span class="count">{{ bannerInfo.joinCount }}</span>
           </div>
           <div class="pls">
-            <span class="cy_comment" data-sid="1468039" data-lddt="yes">67</span
-            >人评论
+            <span class="cy_comment" data-sid="1468039" data-lddt="yes">
+              {{ bannerInfo.commentsCount }}
+            </span>
+            人评论
           </div>
         </div>
       </div>
@@ -27,8 +29,26 @@
 
 
 <script>
+import util from "../../utils/date";
 export default {
-  setup() {},
+  props: ["bannerInfo"],
+  computed: {
+    editTime() {
+      return this.bannerInfo.updateTime == null
+        ? this.bannerInfo.createTime
+        : this.bannerInfo.updateTime;
+    },
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    formatTime: function (dateTime) {
+      return !dateTime || dateTime == ""
+        ? ""
+        : util.formatDate.format(new Date(dateTime), "yyyy-MM-dd hh:mm:ss");
+    },
+  },
 };
 </script>
 
@@ -54,7 +74,8 @@ export default {
   width: 100%;
   min-width: 1070px;
   height: 185px;
-  background: url(http://localhost:9000/gameinfopic/tmk.png) 0 bottom repeat-x;
+  background: url(http://localhost:9000/articleinfo/commonpic/tmk.png) 0 bottom
+    repeat-x;
 }
 
 .Top2 .con {
@@ -95,7 +116,7 @@ export default {
   width: auto;
   height: 20px;
   line-height: 20px;
-  background: url(http://localhost:9000/gameinfopic/time-view-comment.png)
+  background: url(http://localhost:9000/articleinfo/commonpic/time-view-comment.png)
     no-repeat;
 }
 

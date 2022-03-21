@@ -6,14 +6,16 @@
           ><img
             width="70"
             height="70"
-            src="http://localhost:9000/userinfopic/avatar.jpg" />
+            :src="`http://localhost:9000/` + authorInfo.avatar" />
           <div class="bdr"></div
         ></a>
       </div>
       <div class="ac2">
-        <div class="tit">作者：<span>前朝刘沛公</span></div>
+        <div class="tit">
+          作者：<span>{{ authorInfo.author }}</span>
+        </div>
         <div class="txt">
-          初见你那一刻心里有场海啸，可我没能鼓起勇气，呼叫师级支援火炮。
+          {{ authorInfo.introduction }}
         </div>
       </div>
     </div>
@@ -21,23 +23,29 @@
       <div class="pingce2">
         <img
           width="300"
-          src="http://localhost:9000/gameinfopic/smallpicture.jpg"
+          :src="'http://localhost:9000/' + this.gameInfo.roughPic"
         />
         <div class="pc">
           <div class="pc1">
             <div class="pc1_num">
-              <div class="pnum n8-5">8.1</div>
-              <div class="txt1">纪元：变异</div>
+              <div class="pnum n8-5">{{ this.gameInfo.score }}</div>
+              <div class="txt1">{{ this.gameInfo.gameName }}</div>
             </div>
           </div>
           <div class="pc2">
             <div class="like lk1">
-              <span class="jia">难度曲线平滑</span
-              ><span class="jia">世界观搭建值得品味</span
-              ><span class="jia">2D与3D相结合的奇特视角</span
-              ><span class="jia">小游戏与支线内容足够有趣</span>
+              <span class="jia"
+                >平台: {{ this.gameInfo.suggestion.system }}</span
+              ><span class="jia">CPU: {{ this.gameInfo.suggestion.cpu }}</span
+              ><span class="jia">显卡: {{ this.gameInfo.suggestion.card }}</span
+              ><span class="jia"
+                >内存: {{ this.gameInfo.suggestion.memory }}G</span
+              >
+              <span class="jia"
+                >硬盘: {{ this.gameInfo.suggestion.size }}GB</span
+              >
             </div>
-            <div class="pingtai">测试平台：PC</div>
+            <div class="pingtai">支持平台: {{ this.gameInfo.platfrom }}</div>
           </div>
           <div class="pc3">
             <router-link :to="'/game/1'">去购买</router-link>
@@ -50,6 +58,7 @@
 
 <script>
 export default {
+  props: ["authorInfo", "gameInfo"],
   setup() {},
 };
 </script>
@@ -163,8 +172,8 @@ export default {
 .pingce2 .pc .pc1 {
   width: 300px;
   height: 250px;
-  background: url(http://localhost:9000/gameinfopic/game_01.png) 0 bottom
-    repeat-x;
+  background: url(http://localhost:9000/articleinfo/commonpic/game_01.png) 0
+    bottom repeat-x;
 }
 
 .pingce2 .pc .pc1 .pc1_num {
@@ -181,7 +190,7 @@ export default {
 }
 
 .pingce2 .pc .pc1 .pc1_num .pnum {
-  background: url(http://localhost:9000/gameinfopic/pf.png) no-repeat;
+  background: url(http://localhost:9000/articleinfo/commonpic/pf.png) no-repeat;
 }
 
 .pingce2 .pc .pc1 .pc1_num .pnum {
@@ -224,7 +233,7 @@ export default {
 }
 
 .pingce2 .pc .pc2 .like span {
-  background: url(http://localhost:9000/gameinfopic/jj.gif) no-repeat;
+  background: url(http://localhost:9000/articleinfo/commonpic/jj.gif) no-repeat;
 }
 
 .pingce2 .pc .pc2 .like span {
@@ -238,7 +247,8 @@ export default {
 }
 
 .pingce2 .pc .pc2 .pingtai {
-  background: url(http://localhost:9000/gameinfopic/pt.png) 0 13px no-repeat;
+  background: url(http://localhost:9000/articleinfo/commonpic/pt.png) 0 13px
+    no-repeat;
 }
 
 .pingce2 .pc .pc2 .pingtai {
@@ -253,7 +263,7 @@ export default {
 }
 
 .pingce2 .pc .pc3 {
-  background: url(http://localhost:9000/gameinfopic/buy.png) no-repeat;
+  background: url(http://localhost:9000/articleinfo/commonpic/buy.png) no-repeat;
 }
 
 .pingce2 .pc .pc3 {

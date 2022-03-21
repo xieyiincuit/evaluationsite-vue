@@ -2,11 +2,7 @@
   <div class="Mid_L">
     <div class="MidLcon">
       <p>
-        出色的关卡布置和合理的资源散布，赋予了《纪元：变异》一个合理又不失挑战性的难度曲线，玩家并不需要将过多的精力花费在规划自己的成长路线上，只要按部就班的拿材料换换装备、点点对应技能，就能够从容应对大部分的局面。
-        诚然，《纪元：变异》的战斗玩法并不完美，但在种种精妙的设计的加持下，它仍能让玩家们感受到快感和乐趣所在。当光刃与利爪相碰，子弹与钢铁交融时，我看到那高楼寰宇间的曼妙身影，在霓虹灯的照耀下划出了数道剑光。
-        就目前的表现来看，《纪元：变异》所展现出的素质并没有辜负玩家们四年的期待。它通过多种多样的玩法、情节曲折的故事以及自然流畅的战斗，为我们呈现出了一个值得细细品味的赛博朋克世界。
-        在武器类型的选择上，玩家的选择范围可谓是丰富多样：光刃双刃巨刃、手雷手枪火箭筒……游戏中的每种武器既有着适合其发挥的场景，同时也存在着一定的局限性，只有因时制宜的使用才能在面对敌人时做到游刃有余。
-        虽说这些武器通常是以材料+货币购买的形式来获取的，但就实际体验来看玩家并不需要刻意的去“肝”它们。只要正常的推进主线，那么在合适的时间点上购买一把足以应付当前怪物的武器，并不是什么难事。
+        {{ content }}
       </p>
     </div>
     <div class="remark">
@@ -19,46 +15,79 @@
         </div>
       </div>
       <div class="remark-list">
-        <div class="remark-list-floor">
-          <div class="remark-cont-head">
-            <a class="userlink" target="_blank">
-              <img src="http://localhost:9000/userinfopic/avatar.jpg" />
-            </a>
-          </div>
-          <div class="remark-cont-wrap">
-            <div class="remark-wrap">
-              <div class="wrap-user">
-                <div class="user-name">
-                  <span>周写意</span>
-                </div>
-                <div class="user-time">2022-03-17 19:11</div>
-              </div>
-              <div class="remark-issue">
-                <div class="remark-content">
-                  <div class="content">
-                    不推荐，开发好几年就开发个这?就这连屁用没有的收藏包能要100多?谁给你们的自信拿个这种品质的东西出来招摇撞骗，是不是顶着个国产游戏的名头就出来挂羊头卖狗肉了?国产游戏还是去s吧，我是怕了，赶紧去个什么垃圾手游的公司找个班上，那样我眼前也清净不少。
+        <template v-for="comment in comments" :key="comment.commentId">
+          <div class="remark-list-floor">
+            <div class="remark-cont-head">
+              <a class="userlink" target="_blank">
+                <img
+                  :src="
+                    'http://localhost:9000/' + findUserAvatar(comment.userId)
+                  "
+                />
+              </a>
+            </div>
+            <div class="remark-cont-wrap">
+              <div class="remark-wrap">
+                <div class="wrap-user">
+                  <div class="user-name">
+                    <span>{{ findUserName(comment.userId) }}</span>
+                  </div>
+                  <div class="user-time">
+                    {{ formatTime(comment.createTime) }}
                   </div>
                 </div>
-              </div>
-              <div class="remark-action">
-                <div class="remark-action-btn">
-                  <a href="javascript:;" class="remark-reply">
-                    <span class="t1">展开回复（<em>13</em>）</span>
-                    <span class="t2">收起回复</span>
-                  </a>
+                <div class="remark-issue">
+                  <div class="remark-content">
+                    <div class="content">
+                      {{ comment.content }}
+                    </div>
+                  </div>
+                </div>
+                <div class="remark-action">
+                  <div class="remark-action-btn">
+                    <a href="javascript:;" class="remark-reply">
+                      <span class="t1">展开回复（<em>13</em>）</span>
+                      <span class="t2">收起回复</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import util from "../../utils/date";
+
 export default {
+  props: ["content", "comments", "commentUser"],
+
   setup() {},
+  methods: {
+    formatTime: function (dateTime) {
+      return !dateTime || dateTime == ""
+        ? ""
+        : util.formatDate.format(new Date(dateTime), "yyyy-MM-dd hh:mm");
+    },
+    findUserName: function (userId) {
+      console.log(userId);
+      console.log(this.commentUser);
+      var user = this.commentUser.find((o) => o.id === userId);
+      console.log(user);
+      return user.nickName == null ? "匿名用户" : user.nickName;
+    },
+    findUserAvatar: function (userId) {
+      console.log(userId);
+      console.log(this.commentUser);
+      var user = this.commentUser.find((o) => o.id === userId);
+      console.log(user);
+      return user.avatar == null ? "" : user.avatar;
+    },
+  },
 };
 </script>
 
@@ -132,7 +161,7 @@ div {
 }
 
 .MidLtit .plbtn a span {
-  background: url(http://localhost:9000/gameinfopic/dp.png) 0 -24px no-repeat;
+  background: url(http://localhost:9000/articleinfo/commonpic/dp.png) 0 -24px no-repeat;
 }
 
 .MidLtit .plbtn a span {

@@ -126,7 +126,7 @@ export default {
       if (user) {
         return user.avatar == "default"
           ? "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-          : "http://localhost:9000/userinfopic/" + user.avatar;
+          : "http://localhost:9000/" + user.avatar;
       }
       return "";
     },

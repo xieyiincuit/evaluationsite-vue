@@ -13,6 +13,7 @@ export default defineConfig({
     alias: {
       '~/': `${pathSrc}/`,
       '/images': 'src/assets/images',
+      '/pic': 'src/assets/images/pic',
       styles: path.resolve(__dirname, 'src/styles'),
       router: path.resolve(__dirname, 'src/router'),
       views: path.resolve(__dirname, 'src/views'),
@@ -21,8 +22,6 @@ export default defineConfig({
       utils: path.resolve(__dirname, 'src/utils'),
       src: path.resolve(__dirname, 'src'),
       assets: path.resolve(__dirname, 'src/assets'),
-      '/pic': 'src/assets/images/pic',
-      '/description-default.jpg': 'src/assets/images/pic/csgo.png'
     },
   },
   css: {
