@@ -5,23 +5,23 @@
 </template>
 
 <script>
-import Header from "./components/layouts/header.vue";
-import Footer from "./components/layouts/footer.vue";
-import userAuth from "src/auth/userauth";
+import Header from './components/layouts/header.vue'
+import Footer from './components/layouts/footer.vue'
+import userAuth from 'src/auth/userauth'
 
 export default {
-  name: "app",
+  name: 'app',
   mixins: [userAuth],
   components: {
     Header,
-    Footer,
+    Footer
   },
   watch: {
     $route: async function (to, from) {
-      await this.refreshUserInfo();
-    },
-  },
-};
+      await this.refreshUserInfo()
+    }
+  }
+}
 </script>
 
 <style>

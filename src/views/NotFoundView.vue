@@ -8,8 +8,7 @@
           Sorry, an error has occured, Requested page not found!
         </div>
         <div class="error-actions">
-          <router-link to="/" class="btn btn-primary btn-lg"
-            ><span class="glyphicon glyphicon-home"></span> 返回首页
+          <router-link to="/" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span> 返回首页
           </router-link>
         </div>
       </div>

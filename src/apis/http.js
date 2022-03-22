@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from '../store/index'
+import applicationUserManager from "../auth/applicationusermanager";
 
 //异步请求默认超时时间设为10s
 axios.defaults.timeout = 10000
@@ -34,9 +35,9 @@ var requestStore = store
 axios.interceptors.request.use(
     config => {
         console.log("request interceptors log  | url:" + config.url, " method:" + config.method, " params:" + config.params)
-        if (requestStore.state.token) {
+        if (requestStore.state.identity.token) {
             // 判断是否存在token，如果存在的话，则每个http header都加上token
-            config.headers.Authorization = "Bearer " + requestStore.state.token;
+            config.headers.Authorization = "Bearer " + requestStore.state.identity.token;
         }
         return config;
     },
@@ -57,6 +58,8 @@ axios.interceptors.response.use(
                     // Vuex模块化管理，调用具体的mutation需加上namespace
                     store.commit("identity/saveToken", "");
                     window.localStorage.removeItem("USER_NICKNAME");
+                    window.localStorage.removeItem("USER_EXP");
+                    window.localStorage.removeItem("access_token");
                     applicationUserManager.login();
             }
         }
@@ -82,6 +85,7 @@ function apiAxios(method, url, params, success, failure) {
         .catch(function (err) {
             if (err) {
                 console.log("api error, HTTP message: " + err);
+                failure(err.data)
             }
         });
 }

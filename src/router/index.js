@@ -32,7 +32,7 @@ const routes = [
         name: 'create',
         component: ArticleAddView,
         meta: {
-            requireAuth: false //表面此路由需要身份认证授权
+            requireAuth: true//表面此路由需要身份认证授权
         }
     },
     {

@@ -1,9 +1,7 @@
 <template>
   <div class="Mid_L">
     <div class="MidLcon">
-      <p>
-        {{ content }}
-      </p>
+      <span v-html="content"></span>
     </div>
     <div class="remark">
       <div class="MidLtit">
@@ -19,11 +17,9 @@
           <div class="remark-list-floor">
             <div class="remark-cont-head">
               <a class="userlink" target="_blank">
-                <img
-                  :src="
+                <img :src="
                     'http://localhost:9000/' + findUserAvatar(comment.userId)
-                  "
-                />
+                  " />
               </a>
             </div>
             <div class="remark-cont-wrap">
@@ -46,9 +42,50 @@
                 <div class="remark-action">
                   <div class="remark-action-btn">
                     <a href="javascript:;" class="remark-reply">
-                      <span class="t1">展开回复（<em>13</em>）</span>
-                      <span class="t2">收起回复</span>
+                      <span class="t1">举报</span> |
+                      <span class="t2">回复</span>
                     </a>
+                  </div>
+                </div>
+                <div class="remark-build cur">
+                  <div class="remark-build-cont">
+                    <template v-for="reply in comment.replies" :key="reply.commentId">
+                      <div class="remark-build-cont-floor">
+                        <div class="remark-cont-head">
+                          <a class="userlink" target="_blank">
+                            <img :src="'http://localhost:9000/' + findUserAvatar(reply.userId)" />
+                          </a>
+                        </div>
+                        <div class="remark-cont-wrap">
+                          <div class="remark-wrap">
+                            <div class="floor-user" v-if="reply.replyUserId == null">
+                              <a class="uname" target="_blank">{{ findUserName(reply.userId) }}</a>
+                              <i>: </i>
+                              <span class="floor-con">{{ reply.content }}</span>
+                            </div>
+                            <div class="floor-user" v-else>
+                              <a class="uname" target="_blank">{{ findUserName(reply.userId) }}</a>
+                              <i class="reply-i">回复</i>
+                              <a class="uname" target="_blank">{{ findUserName(reply.replyUserId) }}</a>
+                              <i>: </i>
+                              <span class="floor-con">{{ reply.content }}</span>
+                            </div>
+                            <div class="floor-action">
+                              <span class="report">
+                                <a href="javascript:;" class="report-btn">举报</a>
+                                <i> | </i>
+                              </span>
+                              <a href="javascript:;" class="btn-reply">回复</a>
+                              <i>| </i>
+                              <span class="remark-time">{{
+                                formatTime(reply.createTime)
+                              }}</span>
+                            </div>
+                            <div class="remark-reply-con"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -61,34 +98,26 @@
 </template>
 
 <script>
-import util from "../../utils/date";
+import util from '../../utils/date'
 
 export default {
-  props: ["content", "comments", "commentUser"],
+  props: ['content', 'comments', 'commentUser'],
 
   setup() {},
   methods: {
     formatTime: function (dateTime) {
-      return !dateTime || dateTime == ""
-        ? ""
-        : util.formatDate.format(new Date(dateTime), "yyyy-MM-dd hh:mm");
+      return !dateTime || dateTime == '' ? '' : util.formatDate.format(new Date(dateTime), 'yyyy-MM-dd hh:mm')
     },
     findUserName: function (userId) {
-      console.log(userId);
-      console.log(this.commentUser);
-      var user = this.commentUser.find((o) => o.id === userId);
-      console.log(user);
-      return user.nickName == null ? "匿名用户" : user.nickName;
+      var user = this.commentUser.find((o) => o.id === userId)
+      return user.nickName == null ? '匿名用户' : user.nickName
     },
     findUserAvatar: function (userId) {
-      console.log(userId);
-      console.log(this.commentUser);
-      var user = this.commentUser.find((o) => o.id === userId);
-      console.log(user);
-      return user.avatar == null ? "" : user.avatar;
-    },
-  },
-};
+      var user = this.commentUser.find((o) => o.id === userId)
+      return user.avatar == null ? '' : user.avatar
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -207,7 +236,7 @@ div {
 .remark-wrap {
   padding: 10px 15px;
   height: auto;
-  background: #eee;
+  background: #fff;
   border-radius: 10px;
 }
 
@@ -247,7 +276,7 @@ div {
   line-height: 24px;
   color: #555;
   font-size: 14px;
-  font-family: "Microsoft YaHei";
+  font-family: 'Microsoft YaHei';
   overflow: hidden;
 }
 
@@ -271,17 +300,104 @@ div {
 .remark-action-btn a.remark-reply {
   margin-left: -3px;
   padding-left: 13px;
-  color: #333;
+  color: #999;
   background: transparent;
 }
 
 .remark-action-btn a.remark-reply .t1 {
   display: inline-block;
-  font-size: 14px;
-  color: #f93154;
+  font-size: 13px;
+  color: #999;
 }
 
 .remark-action-btn a.remark-reply .t2 {
-  display: none;
+  display: inline-block;
+  font-size: 13px;
+  color: #999;
+}
+
+.remark-build.cur {
+  display: block;
+}
+.remark-build {
+  display: block;
+  padding: 25px 0 20px;
+  overflow: hidden;
+  background: url(http://localhost:9000/articleinfo/commonpic/evt-vv.png) right 0 no-repeat;
+}
+
+.remark-build-cont {
+  width: 100%;
+  height: auto;
+}
+.remark-build-cont-floor {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+.remark-build-cont-floor .remark-cont-head {
+  width: 54px;
+  height: 54px;
+}
+
+.remark-cont-wrap {
+  padding-left: 19px;
+  width: auto;
+  height: auto;
+}
+
+.remark-build .floor-user {
+  margin-bottom: 4px;
+}
+.remark-build .floor-user .uname {
+  height: 20px;
+  line-height: 20px;
+  color: #0983bb;
+  font-size: 14px;
+  font-weight: normal;
+}
+.remark-build .floor-user a {
+  margin-right: 5px;
+  display: inline-block;
+}
+a {
+  color: #262626;
+  text-decoration: none;
+}
+.remark-build .floor-user .floor-con {
+  display: inline;
+  line-height: 20px;
+  color: #666;
+  font-size: 14px;
+}
+
+.remark-build .floor-con {
+  line-height: 26px;
+  color: #666;
+  font-size: 14px;
+}
+.floor-action {
+  height: 20px;
+  font-size: 12px;
+  text-align: right;
+  visibility: visible;
+}
+.floor-action .report {
+  float: none;
+}
+.floor-action a {
+  color: #888;
+  font-size: 12px;
+}
+.floor-action .remark-time {
+  color: #999;
+}
+.reply-i {
+  margin-right: 10px;
+  display: inline-block;
+  height: 20px;
+  line-height: 20px;
+  color: #999;
+  font-size: 14px;
 }
 </style>

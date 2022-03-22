@@ -5,6 +5,7 @@
 declare module 'vue' {
   export interface GlobalComponents {
     ArticleItem: typeof import('./components/articles/article-item.vue')['default']
+    ArticleList: typeof import('./components/user/article-list.vue')['default']
     ArticleRank: typeof import('./components/articles/article-rank.vue')['default']
     ArticleType: typeof import('./components/articles/article-type.vue')['default']
     ContentBanner: typeof import('./components/articles/content-banner.vue')['default']

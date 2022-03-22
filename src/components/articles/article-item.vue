@@ -7,20 +7,12 @@
 
       <div class="col-md-3">
         <router-link :to="`/article/${article.articleId}`">
-          <img
-            :src="'http://localhost:9000/' + article.descriptionImage"
-            alt="csgo"
-            class="card-image"
-          />
+          <img :src="'http://localhost:9000/' + article.descriptionImage" alt="csgo" class="card-image" />
         </router-link>
       </div>
       <div class="col-md-9 col-sm-12">
         <div class="card-body">
-          <router-link
-            :to="`/article/${article.articleId}`"
-            class="card-title over-flow-title"
-            id="title"
-          >
+          <router-link :to="`/article/${article.articleId}`" class="card-title over-flow-title" id="title">
             《{{ article.gameName }}》: {{ article.title }}
           </router-link>
           <p class="card-text over-flow-content description">
@@ -29,7 +21,7 @@
           <div class="d-flex justify-content-between align-items-end">
             <p>作者：{{ article.author }}</p>
             <p>发布时间：{{ formatCreateTime(article) }}</p>
-            <p>浏览：578</p>
+            <p>点赞数: {{article.supportCount}}</p>
             <p>评论数：{{ article.commentsCount }}</p>
           </div>
         </div>
@@ -39,17 +31,17 @@
 </template>
 
 <script>
-import util from "../../utils/date";
+import util from '../../utils/date'
 export default {
-  props: ["articles"],
+  props: ['articles'],
   methods: {
     formatCreateTime: function (row) {
-      return !row.createTime || row.createTime == ""
-        ? ""
-        : util.formatDate.format(new Date(row.createTime), "yyyy-MM-dd");
-    },
-  },
-};
+      return !row.createTime || row.createTime == ''
+        ? ''
+        : util.formatDate.format(new Date(row.createTime), 'yyyy-MM-dd')
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -82,11 +74,9 @@ export default {
 }
 
 .description {
-  font: 18px/1.5 "helvetica neue", tahoma, "PingFang SC", "microsoft yahei",
-    arial, "hiragino sans gb", sans-serif;
+  font: 18px/1.5 'helvetica neue', tahoma, 'PingFang SC', 'microsoft yahei', arial, 'hiragino sans gb', sans-serif;
 }
 p {
-  font: 16px/1.5 "helvetica neue", tahoma, "PingFang SC", "microsoft yahei",
-    arial, "hiragino sans gb", sans-serif;
+  font: 16px/1.5 'helvetica neue', tahoma, 'PingFang SC', 'microsoft yahei', arial, 'hiragino sans gb', sans-serif;
 }
 </style>

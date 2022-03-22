@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import router from './router'
 import store from './store'
 import App from "./App.vue"
+import { ElMessage } from 'element-plus'
 
 // Global Css
 import "~/styles/index.scss";
@@ -19,6 +20,7 @@ import http from "~/apis/http.js"
 const app = createApp(App);
 
 app.config.globalProperties.$http = http;
+app.config.globalProperties.$message = ElMessage;
 
 app.use(router)
 app.use(store)
