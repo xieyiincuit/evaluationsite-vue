@@ -21,6 +21,7 @@ const userAuth = {
                 window.localStorage.setItem("USER_EXP", exdate);
                 window.localStorage.setItem("USER_NICKNAME", this.user.nickname);
             } else {
+
                 this.user.nickname = "";
                 this.user.isAuthenticated = false;
             }
@@ -50,6 +51,27 @@ const userAuth = {
                 ":" +
                 second.substring(second.length - 2, second.length)
             );
+        },
+        async login() {
+            try {
+                await applicationUserManager.login()
+            } catch (error) {
+                console.log('login in occured error: ', error)
+                this.$message.error(error)
+            }
+        },
+        async logout() {
+            try {
+                window.localStorage.removeItem('USER_NICKNAME')
+                window.localStorage.removeItem('ACCESS_TOKEN')
+                window.localStorage.removeItem('USER_EXP')
+                await applicationUserManager.logout()
+                this.$store.commit('identity/saveToken', '')
+                this.$store.commit('identity/saveUserInfo', {})
+            } catch (error) {
+                console.log('logout in occured error: ', error)
+                this.$message.error(error)
+            }
         }
     },
     async created() {

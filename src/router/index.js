@@ -3,6 +3,8 @@ import store from '../store/index'
 import ArticlesView from '../views/ArticlesView.vue'
 import ArticleView from '../views/ArticleView.vue'
 import ArticleAddView from '../views/ArticleAddView.vue'
+import UserArticleListView from '../views/UserArticleListView.vue'
+import UserInfoView from '../views/UserInfoView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 
 
@@ -16,6 +18,16 @@ const routes = [
         redirect: {
             name: 'home'
         }
+    },
+    {
+        path: '/my/articles',
+        name: 'myarticles',
+        component: UserArticleListView
+    },
+    {
+        path: '/my',
+        name: 'userinfo',
+        component: UserInfoView
     },
     {
         path: '/articles',

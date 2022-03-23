@@ -5,25 +5,13 @@
     <div class="container">
       <!-- Navbar brand -->
       <a class="navbar-brand me-2" href="#">
-        <img
-          src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
-          height="30"
-          alt="MDB Logo"
-          loading="lazy"
-          style="margin-top: -1px"
-        />
+        <img src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp" height="30" alt="MDB Logo" loading="lazy"
+             style="margin-top: -1px" />
       </a>
 
       <!-- Toggle button -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-mdb-toggle="collapse"
-        data-mdb-target="#navbarButtonsExample"
-        aria-controls="navbarButtonsExample"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarButtonsExample"
+              aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fas fa-bars"></i>
       </button>
 
@@ -45,56 +33,27 @@
         <!-- Left links -->
 
         <div class="d-flex align-items-center">
-          <button
-            type="button"
-            class="btn btn-outline-success me-3 font-btn"
-            v-show="user == null"
-            @click="login"
-          >
+          <button type="button" class="btn btn-outline-success me-3 font-btn" v-show="user == null" @click="login">
             登 录
           </button>
-          <a
-            role="button"
-            href="http://localhost:5105/Account/Register"
-            class="btn btn-outline-info me-3 font-btn"
-            v-show="user == null"
-          >
+          <a role="button" href="http://localhost:5105/Account/Register" class="btn btn-outline-info me-3 font-btn" v-show="user == null">
             注 册
           </a>
-          <router-link
-            :to="{ name: 'create' }"
-            role="button"
-            class="btn btn-danger btn-rounded me-3 font-btn"
-            v-show="role != null && role === 'evaluator'"
-          >
+          <router-link :to="{ name: 'create' }" role="button" class="btn btn-danger btn-rounded me-3 font-btn"
+                       v-show="role != null && role === 'evaluator'">
             写测评
           </router-link>
           <div class="dropdown" v-show="user != null">
-            <a
-              class="dropdown-toggle d-flex align-items-center"
-              href="#"
-              id="navbarDropdownMenuAvatar"
-              role="button"
-              data-mdb-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <img
-                :src="avatar"
-                class="rounded-circle"
-                height="40"
-                alt="avatar"
-                loading="lazy"
-              />
+            <a class="dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown"
+               aria-expanded="false">
+              <img :src="avatar" class="rounded-circle" height="40" alt="avatar" loading="lazy" />
             </a>
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="navbarDropdownMenuAvatar"
-            >
-              <li>
-                <a class="dropdown-item" href="#">个人信息</a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+              <li v-if="role === 'evaluator'">
+                <router-link class="dropdown-item" :to="{ path:'/my/articles' }">我的文章</router-link>
               </li>
               <li>
-                <a class="dropdown-item" href="#">修改密码</a>
+                <router-link class="dropdown-item" :to="{ path:'/my' }">个人信息</router-link>
               </li>
               <li>
                 <a class="dropdown-item" href="#" @click="logout">注销</a>
@@ -111,48 +70,50 @@
 </template>
 
 <script>
-import applicationUserManager from "~/auth/applicationusermanager";
+import applicationUserManager from '~/auth/applicationusermanager'
 
 export default {
   computed: {
     user() {
-      return this.$store.state.identity.user;
+      return this.$store.state.identity.user
     },
     role() {
-      return this.$store.state.identity.role;
+      return this.$store.state.identity.role
     },
     avatar() {
-      const user = this.$store.state.identity.user;
+      const user = this.$store.state.identity.user
       if (user) {
-        return user.avatar == "default"
-          ? "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-          : "http://localhost:9000/" + user.avatar;
+        return user.avatar == 'default'
+          ? 'https://mdbcdn.b-cdn.net/img/new/avatars/2.webp'
+          : 'http://localhost:9000/' + user.avatar
       }
-      return "";
-    },
+      return ''
+    }
   },
   methods: {
     async login() {
       try {
-        await applicationUserManager.login();
+        await applicationUserManager.login()
       } catch (error) {
-        console.log("login in occured error: ", error);
-        this.$root.$emit("show-snackbar", { message: error });
+        console.log('login in occured error: ', error)
+        this.$message.error(error)
       }
     },
     async logout() {
       try {
-        window.localStorage.removeItem("USER_NICKNAME");
-        await applicationUserManager.logout();
-        this.$store.commit("identity/saveToken", "");
-        this.$store.commit("identity/saveUserInfo", {});
+        window.localStorage.removeItem('USER_NICKNAME')
+        window.localStorage.removeItem('ACCESS_TOKEN')
+        window.localStorage.removeItem('USER_EXP')
+        await applicationUserManager.logout()
+        this.$store.commit('identity/saveToken', '')
+        this.$store.commit('identity/saveUserInfo', {})
       } catch (error) {
-        console.log("logout in occured error: ", error);
-        this.$root.$emit("show-snackbar", { message: error });
+        console.log('logout in occured error: ', error)
+        this.$message.error(error)
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 

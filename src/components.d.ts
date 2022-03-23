@@ -5,7 +5,6 @@
 declare module 'vue' {
   export interface GlobalComponents {
     ArticleItem: typeof import('./components/articles/article-item.vue')['default']
-    ArticleList: typeof import('./components/user/article-list.vue')['default']
     ArticleRank: typeof import('./components/articles/article-rank.vue')['default']
     ArticleType: typeof import('./components/articles/article-type.vue')['default']
     ContentBanner: typeof import('./components/articles/content-banner.vue')['default']
@@ -14,18 +13,28 @@ declare module 'vue' {
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCol: typeof import('element-plus/es')['ElCol']
+    ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
+    ElEmpty: typeof import('element-plus/es')['ElEmpty']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
+    ElPopconfirm: typeof import('element-plus/es')['ElPopconfirm']
     ElRadio: typeof import('element-plus/es')['ElRadio']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
+    ElRow: typeof import('element-plus/es')['ElRow']
     ElSelect: typeof import('element-plus/es')['ElSelect']
+    ElTable: typeof import('element-plus/es')['ElTable']
+    ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+    ElTabPane: typeof import('element-plus/es')['ElTabPane']
+    ElTabs: typeof import('element-plus/es')['ElTabs']
+    ElTag: typeof import('element-plus/es')['ElTag']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     Footer: typeof import('./components/layouts/footer.vue')['default']
     Header: typeof import('./components/layouts/header.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
+    UserInfo: typeof import('./components/user/user-info.vue')['default']
   }
 }
 

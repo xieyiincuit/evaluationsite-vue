@@ -12,7 +12,7 @@
           </a>
         </div>
       </div>
-      <div class="remark-list">
+      <div class="remark-list" v-if="comments == null">
         <template v-for="comment in comments" :key="comment.commentId">
           <div class="remark-list-floor">
             <div class="remark-cont-head">
@@ -93,6 +93,9 @@
           </div>
         </template>
       </div>
+      <template v-else>
+        <el-empty :image-size="200" description="暂无评论，来发表你的观点吧 ^ ^" />
+      </template>
     </div>
   </div>
 </template>

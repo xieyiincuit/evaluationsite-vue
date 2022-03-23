@@ -75,6 +75,7 @@ export default {
 
 .description {
   font: 18px/1.5 'helvetica neue', tahoma, 'PingFang SC', 'microsoft yahei', arial, 'hiragino sans gb', sans-serif;
+  height: 55px;
 }
 p {
   font: 16px/1.5 'helvetica neue', tahoma, 'PingFang SC', 'microsoft yahei', arial, 'hiragino sans gb', sans-serif;

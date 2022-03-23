@@ -18,7 +18,6 @@ const actions = {
 const mutations = {
     saveToken(state, newToken) {
         state.token = newToken
-        window.localStorage.setItem("access_token", newToken);
     },
     saveUserInfo(state, userInfo) {
         state.user = userInfo.profile

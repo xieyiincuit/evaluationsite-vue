@@ -59,7 +59,7 @@ axios.interceptors.response.use(
                     store.commit("identity/saveToken", "");
                     window.localStorage.removeItem("USER_NICKNAME");
                     window.localStorage.removeItem("USER_EXP");
-                    window.localStorage.removeItem("access_token");
+                    window.localStorage.removeItem("ACCESS_TOKEN");
                     applicationUserManager.login();
             }
         }

@@ -23,9 +23,11 @@ export default {
       let user = await applicationUserManager.getUser()
       this.$store.commit('identity/saveUserInfo', user)
       this.$store.commit('identity/saveToken', user.access_token)
+
       var exdate = this.formatUnixtimestamp(user.expires_at)
       window.localStorage.setItem('USER_EXP', exdate)
       window.localStorage.setItem('USER_NICKNAME', user.profile.nickname)
+      window.localStorage.setItem('ACCESS_TOKEN', user.access_token)
       this.$router.push({ name: 'home' })
     } catch (e) {
       console.log('logincallback exception:', e)
