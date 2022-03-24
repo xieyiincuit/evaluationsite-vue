@@ -22,12 +22,18 @@ const routes = [
     {
         path: '/my/articles',
         name: 'myarticles',
-        component: UserArticleListView
+        component: UserArticleListView,
+        meta: {
+            requireAuth: true//表面此路由需要身份认证授权
+        }
     },
     {
         path: '/my',
         name: 'userinfo',
-        component: UserInfoView
+        component: UserInfoView,
+        meta: {
+            requireAuth: true//表面此路由需要身份认证授权
+        }
     },
     {
         path: '/articles',
@@ -50,7 +56,7 @@ const routes = [
     {
         path: "/callback",
         name: "loginCallBack",
-        component: LoginCallbackView
+        component: LoginCallbackView,
     },
     {
         path: "/:pathMatch(.*)*",
@@ -69,7 +75,7 @@ var routerStore = store
 //注册全局前置导航守卫
 router.beforeEach((to, from, next) => {
     if (!routerStore.state.identity.token) {
-        routerStore.commit("identity/saveToken", window.localStorage.access_token);
+        routerStore.commit("identity/saveToken", window.localStorage.getItem("ACCESS_TOKEN"));
     }
     if (to.meta.requireAuth) {
         // 判断该路由是否需要认证授权

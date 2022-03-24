@@ -85,7 +85,7 @@ function apiAxios(method, url, params, success, failure) {
         .catch(function (err) {
             if (err) {
                 console.log("api error, HTTP message: " + err);
-                failure(err.data)
+                failure(err)
             }
         });
 }

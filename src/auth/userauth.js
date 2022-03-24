@@ -20,8 +20,8 @@ const userAuth = {
                 this.$store.commit("identity/saveUserInfo", userIds);
                 window.localStorage.setItem("USER_EXP", exdate);
                 window.localStorage.setItem("USER_NICKNAME", this.user.nickname);
+                window.localStorage.setItem("ACCESS_TOKEN", userIds.access_token);
             } else {
-
                 this.user.nickname = "";
                 this.user.isAuthenticated = false;
             }

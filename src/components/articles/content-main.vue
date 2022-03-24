@@ -6,17 +6,26 @@
     <div class="remark">
       <div class="MidLtit">
         <div class="tit">玩家点评</div>
-        <div class="plbtn">
-          <a class="itobtn tpbtn" href="javascript:;" target="_blank">
-            <span>我要点评</span>
+        <div class="plbtn" v-show="user == null">
+          <a class="itobtn tpbtn" @click="login" href="javascript:void(0)">
+            <span>登录后参与评论</span>
           </a>
         </div>
       </div>
-      <div class="remark-list" v-if="comments == null">
+      <div class="cmt-textarea" v-show="user != null">
+        <div class="cmt-textarea-con">
+          <el-input class="textarea-pl" type="textarea" :rows="5" placeholder="来说两句吧">
+          </el-input>
+        </div>
+        <div class="cmt-textarea-bot">
+          <a href="javascript:;" class="cmt_submit">发布</a>
+        </div>
+      </div>
+      <div class="remark-list" v-if="comments.length !== 0">
         <template v-for="comment in comments" :key="comment.commentId">
           <div class="remark-list-floor">
             <div class="remark-cont-head">
-              <a class="userlink" target="_blank">
+              <a class="userlink">
                 <img :src="
                     'http://localhost:9000/' + findUserAvatar(comment.userId)
                   " />
@@ -102,11 +111,16 @@
 
 <script>
 import util from '../../utils/date'
-
 export default {
   props: ['content', 'comments', 'commentUser'],
-
-  setup() {},
+  computed: {
+    user() {
+      return this.$store.state.identity.user
+    },
+    role() {
+      return this.$store.state.identity.role
+    }
+  },
   methods: {
     formatTime: function (dateTime) {
       return !dateTime || dateTime == '' ? '' : util.formatDate.format(new Date(dateTime), 'yyyy-MM-dd hh:mm')
@@ -118,7 +132,8 @@ export default {
     findUserAvatar: function (userId) {
       var user = this.commentUser.find((o) => o.id === userId)
       return user.avatar == null ? '' : user.avatar
-    }
+    },
+    login() {}
   }
 }
 </script>
@@ -328,7 +343,6 @@ div {
   overflow: hidden;
   background: url(http://localhost:9000/articleinfo/commonpic/evt-vv.png) right 0 no-repeat;
 }
-
 .remark-build-cont {
   width: 100%;
   height: auto;
@@ -348,7 +362,6 @@ div {
   width: auto;
   height: auto;
 }
-
 .remark-build .floor-user {
   margin-bottom: 4px;
 }
@@ -373,7 +386,6 @@ a {
   color: #666;
   font-size: 14px;
 }
-
 .remark-build .floor-con {
   line-height: 26px;
   color: #666;
@@ -402,5 +414,67 @@ a {
   line-height: 20px;
   color: #999;
   font-size: 14px;
+}
+.cmt-textarea {
+  margin-bottom: 30px;
+  overflow: visible !important;
+}
+.cmt-textarea-con {
+  background-color: rgb(24, 26, 27);
+  border-top-color: rgb(58, 62, 65);
+  border-right-color: rgb(58, 62, 65);
+  border-left-color: rgb(58, 62, 65);
+  border-bottom-color: initial;
+}
+.cmt-textarea-con .textarea-pl {
+  word-wrap: break-word;
+  border: 0;
+  background: none;
+  outline: 0;
+  resize: none;
+  -webkit-appearance: none;
+  overflow-y: hidden;
+}
+.cmt-textarea-con .textarea-pl {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 120px;
+  line-height: 24px;
+  color: #777;
+  font-size: 16px;
+  font-family: 'Microsoft YaHei';
+}
+.cmt-textarea-con {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
+}
+.cmt-textarea-bot {
+  height: 40px;
+  background-color: #f2f2f3;
+  border: 1px solid #ddd;
+  border-radius: 0 0 3px 3px;
+  overflow: visible !important;
+  position: relative;
+}
+.cmt-textarea-bot a.cmt_submit {
+  background-color: #2d8ae9;
+  border-radius: 0 0 3px 0;
+  position: absolute;
+  right: -1px;
+  top: -1px;
+}
+
+.cmt-textarea-bot a.cmt_submit {
+  display: block;
+  width: 120px;
+  height: 42px;
+  line-height: 42px;
+  color: #fff;
+  font-size: 17px;
+  font-family: 'Microsoft YaHei';
+  text-align: center;
 }
 </style>

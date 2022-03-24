@@ -3,8 +3,8 @@
     <el-tab-pane label="个人信息">
       <el-form :model="userForm" ref="userForm" :rules="userRules" label-width="150px" class="userForm">
         <el-form-item>
-          <el-upload class="avatar-uploader" action="http://localhost:20000/v1/u/avatar/oss" :show-file-list="false" :on-success="handleAvatarSuccess"
-                     :before-upload="beforeAvatarUpload" :on-error="handleAvatarFail">
+          <el-upload class="avatar-uploader" action="http://localhost:20000/v1/u/avatar/oss" :headers="filereqHeader" :show-file-list="false"
+                     :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :on-error="handleAvatarFail" name="avatar">
             <img :src="'http://localhost:9000/' +userForm.avatar " class="avatar" />
             <div class="rounded-2 color-fg-default px-2 py-1 left-0 bottom-0 ml-2 mb-2">
               <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true"
@@ -50,17 +50,22 @@
       <el-form :model="resetForm" label-width="150px" class="userForm" ref="resetForm" :rules="resetRules">
         <el-form-item>
         </el-form-item>
+        <el-row mt-3>
+          <el-form-item label="旧密码：" prop="oldpass">
+            <el-input maxlength="30" type="password" autocomplete="off" v-model="resetForm.oldpass" />
+          </el-form-item>
+        </el-row>
         <el-row>
-          <el-form-item label="旧密码：" prop="pass">
-            <el-input maxlength="30" type="password" autocomplete="off" v-model="resetForm.pass" />
+          <el-form-item label="新密码：" prop="newpass">
+            <el-input maxlength="30" type="password" autocomplete="off" v-model="resetForm.newpass" />
           </el-form-item>
         </el-row>
         <el-row class="mt-5">
-          <el-form-item label="新密码：" prop="checkPass" autocomplete="off">
+          <el-form-item label="确认密码：" prop="checkPass" autocomplete="off">
             <el-input maxlength="30" type="password" autocomplete="off" v-model="resetForm.checkPass" />
           </el-form-item>
         </el-row>
-        <el-form-item class="mt-3">
+        <el-form-item>
           <el-button type="primary" @click="submitForm('resetForm')">重设</el-button>
         </el-form-item>
       </el-form>
@@ -73,10 +78,25 @@ import userAuth from 'src/auth/userauth'
 
 export default {
   mixins: [userAuth],
+  computed: {
+    checkChangeName() {
+      const oldName = window.localStorage.getItem('USER_NICKNAME')
+      return oldName != this.userForm.nickName
+    },
+    filereqHeader() {
+      var token = this.$store.state.identity.token
+      var header = {
+        Authorization: 'Bearer ' + token
+      }
+      return header
+    }
+  },
   data() {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
+      } else if (value === this.resetForm.oldpass) {
+        callback(new Error('新密码与旧密码相同'))
       } else {
         if (this.resetForm.checkPass !== '') {
           this.$refs.resetForm.validateField('checkPass')
@@ -87,7 +107,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.resetForm.pass) {
+      } else if (value !== this.resetForm.newpass) {
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
@@ -95,14 +115,16 @@ export default {
     }
     return {
       resetForm: {
-        pass: '',
+        oldpass: '',
+        newpass: '',
         checkPass: ''
       },
       resetRules: {
-        pass: [
+        oldpass: [{ required: true, message: '请输入旧密码', trigger: 'blur' }],
+        newpass: [
           { validator: validatePass, trigger: 'blur' },
           {
-            pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,30}$/, //正则校验不用字符串
+            pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[.@$!%*#?&])[A-Za-z\d$.@$!%*#?&]{8,30}$/, //正则校验不用字符串
             message: '密码长度为8-30字符, 其中至少包含1个字母, 1个数字和1个特殊字符(@$!%*#?&)',
             trigger: 'blur'
           }
@@ -142,12 +164,7 @@ export default {
       }
     }
   },
-  computed: {
-    checkChangeName() {
-      const oldName = window.localStorage.getItem('USER_NICKNAME')
-      return oldName != this.userForm.nickName
-    }
-  },
+
   methods: {
     beforeAvatarUpload(file) {
       const isJPGPNG = file.type === 'image/jpeg' || file.type === 'image/png'
@@ -163,6 +180,7 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       this.userForm.avatar = res
+      this.getUserInfo()
     },
     handleAvatarFail(err) {
       this.$message.error('系统错误，上传文件失败')
@@ -206,7 +224,7 @@ export default {
                 this.getUserInfo()
               },
               (err) => {
-                this.$message.error('用户信息更新失败')
+                this.$message.error(`更新失败: ${err.errors.DomainValidations[0]}`)
                 console.log(err)
               }
             )
@@ -214,18 +232,19 @@ export default {
             //重设密码
             console.log(formName)
             var passwordDto = {
-              password: this.resetForm.pass,
-              confirmPassword: this.resetForm.checkPass
+              oldpassword: this.resetForm.oldpass,
+              newPassword: this.resetForm.newpass,
+              checkPassword: this.resetForm.checkPass
             }
             this.$http.put(
               'v1/u/password',
               passwordDto,
               async (res) => {
-                this.$message.success('用户密码改变，请重新登录')
+                this.$message.success('用户状态改变')
                 await this.logout()
               },
               (err) => {
-                this.$message.error(err)
+                this.$message.error('你的用户密码错误，请重试')
               }
             )
           }
