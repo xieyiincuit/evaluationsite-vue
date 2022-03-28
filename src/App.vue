@@ -1,6 +1,8 @@
 <template>
   <Header />
-  <router-view></router-view>
+  <el-config-provider :locale="locale">
+    <router-view></router-view>
+  </el-config-provider>
   <!-- <Footer /> -->
 </template>
 
@@ -8,17 +10,24 @@
 import Header from './components/layouts/header.vue'
 import Footer from './components/layouts/footer.vue'
 import userAuth from 'src/auth/userauth'
-
+import { ElConfigProvider } from 'element-plus'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 export default {
   name: 'app',
   mixins: [userAuth],
   components: {
     Header,
-    Footer
+    Footer,
+    ElConfigProvider
   },
   watch: {
     $route: async function (to, from) {
       await this.refreshUserInfo()
+    }
+  },
+  setup() {
+    return {
+      locale: zhCn
     }
   }
 }

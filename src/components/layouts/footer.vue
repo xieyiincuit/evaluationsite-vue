@@ -1,16 +1,12 @@
 <template>
   <div class="clear"></div>
-  <footer class="bg-dark text-center text-white fixed-bottom">
+  <footer class="bg-black text-center text-white fixed-bottom">
     <!-- Grid container -->
-
     <div class="text-center p-3">
       © 2022 Copyright:
-      <a class="text-white" href="#"
-        >Chengdu University of Information Technology's Student <br /><span
-          class="poweredBy"
-          >Powered by VUE 3.x and .NET 6 on Docker;</span
-        >
-      </a>
+      <span class="text-white">Chengdu University of Information Technology's Student <br />
+        <span class="poweredBy">Powered by VUE 3.x and .NET 6 on Docker;</span>
+      </span>
     </div>
   </footer>
 </template>
