@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import util from '../../utils/date'
+import util from '../../../utils/date'
 export default {
   props: ['content', 'comments', 'commentUser'],
   computed: {

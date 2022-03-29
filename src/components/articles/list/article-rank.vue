@@ -5,7 +5,7 @@
       <li class="list-group-item scope-list" v-for="(game, index) in gameRank" :key="index">
         <div class="d-flex justify-content-between">
           <span class="rank-num">{{ index + 1 }}</span>
-          <span class="rank-title text-start">{{ game.gameName }}</span>
+          <router-link :to="`/game/${game.gameId}`" class="rank-title text-start" id="title">{{ game.gameName }}</router-link>
           <span class="rank-scope">{{ checkScope(game.gameScore) }}</span>
         </div>
       </li>
@@ -35,9 +35,14 @@ export default {
 }
 
 .rank-title {
+  color: black;
   padding-left: 20px;
   padding-right: 30px;
   text-align: left;
+}
+
+#title:hover {
+  color: red;
 }
 
 .rank-scope {

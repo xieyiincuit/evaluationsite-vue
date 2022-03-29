@@ -4,12 +4,12 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    ArticleItem: typeof import('./components/articles/article-item.vue')['default']
-    ArticleRank: typeof import('./components/articles/article-rank.vue')['default']
-    ArticleType: typeof import('./components/articles/article-type.vue')['default']
-    ContentBanner: typeof import('./components/articles/content-banner.vue')['default']
-    ContentInfo: typeof import('./components/articles/content-info.vue')['default']
-    ContentMain: typeof import('./components/articles/content-main.vue')['default']
+    ArticleItem: typeof import('./components/articles/list/article-item.vue')['default']
+    ArticleRank: typeof import('./components/articles/list/article-rank.vue')['default']
+    ArticleType: typeof import('./components/articles/list/article-type.vue')['default']
+    ContentBanner: typeof import('./components/articles/content/content-banner.vue')['default']
+    ContentInfo: typeof import('./components/articles/content/content-info.vue')['default']
+    ContentMain: typeof import('./components/articles/content/content-main.vue')['default']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCol: typeof import('element-plus/es')['ElCol']
@@ -33,6 +33,9 @@ declare module 'vue' {
     ElTag: typeof import('element-plus/es')['ElTag']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     Footer: typeof import('./components/layouts/footer.vue')['default']
+    GameInfo: typeof import('./components/game/content/game-info.vue')['default']
+    GameItem: typeof import('./components/game/list/game-item.vue')['default']
+    GameType: typeof import('./components/game/list/game-type.vue')['default']
     Header: typeof import('./components/layouts/header.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     UserInfo: typeof import('./components/user/user-info.vue')['default']

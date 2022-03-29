@@ -1,14 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '../store/index'
-import ArticlesView from '../views/ArticlesView.vue'
-import ArticleView from '../views/ArticleView.vue'
-import ArticleAddView from '../views/ArticleAddView.vue'
-import UserArticleListView from '../views/UserArticleListView.vue'
-import UserInfoView from '../views/UserInfoView.vue'
+
+import ArticlesView from '../views/Article/ArticlesView.vue'
+import ArticleView from '../views/Article/ArticleView.vue'
+import ArticleAddView from '../views/Article/ArticleAddView.vue'
+
+import UserArticleListView from '../views/User/UserArticleListView.vue'
+import UserInfoView from '../views/User/UserInfoView.vue'
+import LoginCallbackView from '../views/User/LoginCallbackView.vue'
+
+import FindGameView from '../views/Game/FindGameView.vue'
+import GameDetailView from '../views/Game/GameDetailView.vue'
+
 import NotFoundView from '../views/NotFoundView.vue'
-
-
-import LoginCallbackView from '../views/LoginCallbackView.vue'
 import applicationUserManager from "../auth/applicationusermanager";
 
 //定义routes规则
@@ -52,6 +56,16 @@ const routes = [
         meta: {
             requireAuth: true//表面此路由需要身份认证授权
         }
+    },
+    {
+        path: '/game',
+        name: 'gameList',
+        component: FindGameView,
+    },
+    {
+        path: '/game/:id',
+        name: 'gameItem',
+        component: GameDetailView,
     },
     {
         path: "/callback",

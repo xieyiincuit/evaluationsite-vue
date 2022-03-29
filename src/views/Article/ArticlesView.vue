@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-loading.fullscreen.lock="loading">
+  <div class="container" v-loading="loading">
     <div class="row">
       <div class="col-lg-9 col-md-12 col-sm-12">
         <ArticleType />
@@ -28,9 +28,9 @@
 
 <script>
 // @ is an alias to /src
-import ArticleItem from '../components/articles/article-item.vue'
-import ArticleType from '../components/articles/article-type.vue'
-import ArticleRank from '../components/articles/article-rank.vue'
+import ArticleItem from '../../components/articles/list/article-item.vue'
+import ArticleType from '../../components/articles/list/article-type.vue'
+import ArticleRank from '../../components/articles/list/article-rank.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -91,9 +91,9 @@ export default {
               this.gameRank.push(obj)
             }
           }
+          this.loading = false
         })
       })
-      this.loading = false
     },
     handleCurrentChange(val) {
       this.getArticles()

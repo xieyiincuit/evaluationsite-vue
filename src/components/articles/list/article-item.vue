@@ -7,7 +7,7 @@
 
       <div class="col-md-3">
         <router-link :to="`/article/${article.articleId}`">
-          <img :src="'http://localhost:9000/' + article.descriptionImage" alt="csgo" class="card-image" />
+          <img :src="'http://localhost:9000/' + article.descriptionImage" alt="images" class="card-image" />
         </router-link>
       </div>
       <div class="col-md-9 col-sm-12">
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import util from '../../utils/date'
+import util from '../../../utils/date'
 export default {
   props: ['articles'],
   methods: {

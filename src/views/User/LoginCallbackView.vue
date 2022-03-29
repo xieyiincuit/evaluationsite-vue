@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import applicationUserManager from '../auth/applicationusermanager'
+import applicationUserManager from '../../auth/applicationusermanager'
 
 export default {
   name: 'logincallback-view',

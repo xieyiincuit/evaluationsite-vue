@@ -2,7 +2,7 @@
   <div class="container mt-3">
     <div class="row description">
       <el-table ref="articleTable" :data="tableData" style="width: 100%">
-        <el-table-column prop="createTime" label="创建日期" :formatter="timeFormatter" width="150" sortable column-key="createTime">
+        <el-table-column prop="createTime" label="创建日期" :formatter="timeFormatter" width="180" sortable column-key=" createTime">
         </el-table-column>
         <el-table-column prop="name" label="标题" width="400" :formatter="nameFormatter">
         </el-table-column>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import util from '../utils/date'
+import util from '../../utils/date'
 export default {
   data() {
     return {
