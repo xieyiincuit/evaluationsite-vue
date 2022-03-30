@@ -35,6 +35,7 @@ declare module 'vue' {
     Footer: typeof import('./components/layouts/footer.vue')['default']
     GameInfo: typeof import('./components/game/content/game-info.vue')['default']
     GameItem: typeof import('./components/game/list/game-item.vue')['default']
+    GameRemark: typeof import('./components/game/content/game-remark.vue')['default']
     GameType: typeof import('./components/game/list/game-type.vue')['default']
     Header: typeof import('./components/layouts/header.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']

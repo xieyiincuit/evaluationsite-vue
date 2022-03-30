@@ -5,6 +5,7 @@
         <img src="http://localhost:9000/gameinfopic/gamerepo/gameapexbig.jpg" alt="bigPicture" height="500" width="1200" />
       </div>
       <game-info />
+      <game-ramark />
     </div>
   </div>
 
@@ -12,14 +13,20 @@
 
 <script>
 import GameInfo from 'src/components/game/content/game-info.vue'
+import GameRemark from 'src/components/game/content/game-remark.vue'
+
 export default {
   components: {
-    'game-info': GameInfo
+    'game-info': GameInfo,
+    'game-ramark': GameRemark
   }
 }
 </script>
 
 <style scoped>
+* {
+  box-sizing: unset;
+}
 .Mid {
   margin-top: 50px;
   overflow: visible;
@@ -29,7 +36,7 @@ export default {
   padding: 0 20px;
   width: 1200px;
   height: auto;
-  min-height: 800px;
+  min-height: 500px;
 }
 
 .Mid_T {
