@@ -4,13 +4,13 @@
       <div class="wjscore">
         <div class="wjscore-num">
           <div class="num">
-            <i class="n9"></i>
+            <i :style="{ 'background-position-y': score1px + 'px' }"></i>
             <i class="nn"></i>
-            <i class="n1"></i>
+            <i :style="{ 'background-position-y': score2px + 'px' }"></i>
           </div>
           <div class="pin">
             <div class="xin">
-              <div class="x45" style="width:72px"></div>
+              <div class="x45" :style="{ width: xinpx + 'px' }"></div>
             </div>
           </div>
           <div class="txt">玩家评分<span>(<span>546</span>人)</span></div>
@@ -22,15 +22,14 @@
     </div>
     <div class="WJCYtag">
       <span class="tag-con">
-        <a href="javascript:;">我是标签</a>
-        <a href="javascript:;">我是标签</a>
-        <a href="javascript:;">我是标签</a>
-        <a href="javascript:;">我是标签</a>
-        <a href="javascript:;">我是标签</a>
-        <a href="javascript:;">我是标签</a>
-        <a href="javascript:;">我是标签</a>
-        <a href="javascript:;">我是标签</a>
-        <a href="javascript:;">我是标签</a>
+        <a href="javascript:;">动作</a>
+        <a href="javascript:;">射击</a>
+        <a href="javascript:;">无限引用</a>
+        <a href="javascript:;">Java</a>
+        <a href="javascript:;">Golang</a>
+        <a href="javascript:;">javascript</a>
+        <a href="javascript:;">第一人称射击</a>
+        <a href="javascript:;">biabiabia~</a>
       </span>
     </div>
     <div class="MidRtit peizhi">
@@ -41,32 +40,35 @@
         <a href="javascript:;" class="cur">推荐 </a>
       </div>
       <div class="PZcon">
-        <div class="PZXQ">
+        <div class="PZXQ" v-if="gameRemark.suggestion.system !== null">
           <ul class="PZ TJ">
             <li class="tit">推荐配置
             </li>
             <li class="txt">
               <div class="tit">系统</div>
-              <div class="txt"><span>Windows 10/11</span></div>
+              <div class="txt"><span>{{gameRemark.suggestion.system}}</span></div>
             </li>
             <li class="txt">
               <div class="tit">CPU</div>
-              <div class="txt"><span>Intel Core i7-8700K</span></div>
+              <div class="txt"><span>{{gameRemark.suggestion.cpu}}</span></div>
             </li>
             <li class="txt">
               <div class="tit">内存</div>
-              <div class="txt"><span>16 GB</span></div>
+              <div class="txt"><span>{{gameRemark.suggestion.memory}} GB</span></div>
             </li>
             <li class="txt">
               <div class="tit">硬盘</div>
-              <div class="txt"><span>需要 60 GB 可用空间</span></div>
+              <div class="txt"><span>需要 {{gameRemark.suggestion.disk}} GB 可用空间</span></div>
             </li>
             <li class="txt">
               <div class="tit">显卡</div>
-              <div class="txt"><span>NVIDIA GeForce GTX 1070</span></div>
+              <div class="txt"><span>{{gameRemark.suggestion.card}}</span></div>
             </li>
           </ul>
         </div>
+        <template v-else>
+          <el-empty :image-size="200" description="可能是个手游，或者咱忘了给你推荐？？" />
+        </template>
       </div>
     </div>
   </div>
@@ -74,11 +76,22 @@
 
 <script>
 export default {
-  data() {
-    return {
-      num1: 9,
-      num2: 1,
-      xin: 9 * 8
+  props: ['gameRemark'],
+  computed: {
+    score1px() {
+      const scoreStr = this.gameRemark.score.toString()
+      var score1 = scoreStr[0]
+      return score1 * -60
+    },
+    score2px() {
+      const scoreStr = this.gameRemark.score.toString()
+      var score2 = scoreStr[2]
+      return score2 * -60
+    },
+    xinpx() {
+      const scoreStr = this.gameRemark.score.toString()
+      var score1 = scoreStr[0]
+      return score1 * 8
     }
   }
 }
@@ -134,36 +147,7 @@ li {
   background: url(http://localhost:9000/gameinfopic/common/num.png) center 0;
   vertical-align: top;
 }
-.wjscore-num .num i.n0 {
-  background-position-y: -0px;
-}
-.wjscore-num .num i.n1 {
-  background-position-y: -60px;
-}
-.wjscore-num .num i.n2 {
-  background-position-y: -120px;
-}
-.wjscore-num .num i.n3 {
-  background-position-y: -180px;
-}
-.wjscore-num .num i.n4 {
-  background-position-y: -240px;
-}
-.wjscore-num .num i.n5 {
-  background-position-y: -300px;
-}
-.wjscore-num .num i.n6 {
-  background-position-y: -360px;
-}
-.wjscore-num .num i.n7 {
-  background-position-y: -420px;
-}
-.wjscore-num .num i.n8 {
-  background-position-y: -480px;
-}
-.wjscore-num .num i.n9 {
-  background-position-y: -540px;
-}
+
 .wjscore-num .num i.nn {
   width: 30px;
   background-position-y: -600px;

@@ -16,7 +16,7 @@
     <ul class="imglist" v-if="gameinfos.data != null">
       <template v-for="game in gameinfos.data" :key="game.id">
         <li class="gamelist">
-          <router-link :to="`/game/${game.id}`" target="_blank">
+          <router-link :to="`/game/${game.id}`">
             <img :src="`http://localhost:9000/${game.roughPicture}`" width="180" height="250">
             <div class="num">{{game.averageScore}}</div>
             <p>{{game.name}}</p>

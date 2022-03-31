@@ -14,15 +14,16 @@
       </div>
       <div class="cmt-textarea" v-show="user != null">
         <div class="cmt-textarea-con">
-          <el-input class="textarea-pl" type="textarea" :rows="5" placeholder="来说两句吧">
+          <el-input v-model="commentPost.content" class="textarea-pl" type="textarea" :rows="5" :placeholder="cmtHolder" ref="cmtInput"
+                    maxlength="200">
           </el-input>
         </div>
         <div class="cmt-textarea-bot">
-          <a href="javascript:;" class="cmt_submit">发布</a>
+          <a class="cmt_submit" @click="cmtSubmit" href="javascript:;">发布</a>
         </div>
       </div>
       <div class="remark-list" v-if="comments.length !== 0">
-        <template v-for="comment in comments" :key="comment.commentId">
+        <template v-for="comment in this.comments" :key="comment.commentId">
           <div class="remark-list-floor">
             <div class="remark-cont-head">
               <a class="userlink">
@@ -51,8 +52,8 @@
                 <div class="remark-action">
                   <div class="remark-action-btn">
                     <a href="javascript:;" class="remark-reply">
-                      <span class="t1">举报</span> |
-                      <span class="t2">回复</span>
+                      <span class="t1" v-show="IsMyself(comment.userId)">举报|</span>
+                      <span class="t2" @click="replyRootSubmit(comment.userId, comment.commentId)"> 回复</span>
                     </a>
                   </div>
                 </div>
@@ -81,10 +82,11 @@
                             </div>
                             <div class="floor-action">
                               <span class="report">
-                                <a href="javascript:;" class="report-btn">举报</a>
-                                <i> | </i>
+                                <a href="javascript:;" class="report-btn" v-show="IsMyself(reply.userId)">举报</a>
+                                <i v-show="IsMyself(reply.userId)"> | </i>
                               </span>
-                              <a href="javascript:;" class="btn-reply">回复</a>
+                              <a href="javascript:;" class="btn-reply"
+                                 @click="replySubSubmit(reply.userId, reply.rootCommentId, reply.commentId)">回复</a>
                               <i>| </i>
                               <span class="remark-time">{{
                                 formatTime(reply.createTime)
@@ -95,12 +97,17 @@
                         </div>
                       </div>
                     </template>
+                    <el-pagination v-model:currentPage="this.paginationInfo2.currentPage" :page-size="5" :background="true" layout="prev, pager, next"
+                                   :total="comment.repliesCount" @current-change="handleSubCommentChange(comment.commentId)" :small="true"
+                                   :hide-on-single-page="true" class="subPage" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </template>
+        <el-pagination v-model:currentPage="this.paginationInfo.currentPage" :page-size="5" :background="true" layout="prev, pager, next"
+                       :total="this.paginationInfo.totalCount" @current-change="handleRootCommentChange" />
       </div>
       <template v-else>
         <el-empty :image-size="200" description="暂无评论，来发表你的观点吧 ^ ^" />
@@ -111,8 +118,38 @@
 
 <script>
 import util from '../../../utils/date'
+import applicationUserManager from '~/auth/applicationusermanager'
+
 export default {
-  props: ['content', 'comments', 'commentUser'],
+  props: ['content'],
+  data() {
+    return {
+      cmtHolder: '来说两句吧',
+      comments: [],
+      commentUser: [],
+      subCommentUser: [],
+      commentPost: {
+        articleId: 0,
+        rootId: 0,
+        content: '',
+        replyCommentId: 0,
+        userId: null,
+        isReply: null
+      },
+      paginationInfo: {
+        currentPage: 1,
+        totalPages: 0,
+        hasPrevious: false,
+        hasNext: true,
+        totalCount: 0
+      },
+      paginationInfo2: {
+        currentPage: 1,
+        currentCommentId: 0,
+        totalCount: 0
+      }
+    }
+  },
   computed: {
     user() {
       return this.$store.state.identity.user
@@ -127,13 +164,138 @@ export default {
     },
     findUserName: function (userId) {
       var user = this.commentUser.find((o) => o.id === userId)
+      if (user == null) {
+        user = this.subCommentUser.find((x) => x.id === userId)
+      }
       return user.nickName == null ? '匿名用户' : user.nickName
     },
     findUserAvatar: function (userId) {
       var user = this.commentUser.find((o) => o.id === userId)
+      if (user == null) {
+        user = this.subCommentUser.find((x) => x.id === userId)
+      }
       return user.avatar == null ? '' : user.avatar
     },
-    login() {}
+    IsMyself: function (userId) {
+      return userId !== this.user.sub
+    },
+    async login() {
+      try {
+        await applicationUserManager.login()
+      } catch (error) {
+        console.log('login error: ', error)
+        this.$message.error(error)
+      }
+    },
+    cmtSubmit() {
+      if (this.commentPost.content === '') {
+        this.$message.error('人！ 不要说空话 ^ ^')
+        this.$refs['cmtInput'].focus()
+        return
+      }
+      this.commentPost.articleId = this.$route.params.aid
+      console.log(this.commentPost.isReply)
+      if (!this.commentPost.isReply) {
+        var commentAddDto = {
+          articleId: this.commentPost.articleId,
+          content: this.commentPost.content
+        }
+        this.$http.post(
+          'v1/e/article/comments',
+          commentAddDto,
+          (res) => {
+            this.$message.success('评论成功 ^ ^')
+            this.commentPost.content = ''
+            this.getComment()
+          },
+          (fail) => {
+            this.$message.error('发表评论失败，系统错误 - -')
+          }
+        )
+      } else if (this.commentPost.isReply) {
+        var replyAddDto = {
+          articleId: this.commentPost.articleId,
+          content: this.commentPost.content,
+          replyUserId: this.commentPost.userId,
+          rootCommentId: this.commentPost.rootId,
+          replyCommentId: this.commentPost.replyCommentId
+        }
+        this.$http.post(
+          'v1/e/article/comments/reply',
+          replyAddDto,
+          (res) => {
+            this.$message.success('回复成功 ^ ^')
+            this.commentPost.content = ''
+            this.cmtCancle()
+            this.getComment()
+          },
+          (fail) => {
+            this.$message.error('回复失败，系统错误 - -')
+          }
+        )
+      }
+    },
+    cmtCancle() {
+      this.cmtHolder = '来说两句吧'
+      this.commentPost.isReply = false
+      this.commentPost.rootId = 0
+      this.commentPost.replyCommentId = 0
+    },
+    replyRootSubmit(userId, commentId) {
+      const userName = this.commentUser.find((o) => o.id === userId).nickName
+      this.cmtHolder = `@${userName}:`
+      this.commentPost.rootId = commentId
+      this.commentPost.replyCommentId = commentId
+      this.commentPost.isReply = true
+      this.$refs['cmtInput'].focus()
+    },
+    replySubSubmit(userId, rootId, replyCommentId) {
+      const userName = this.commentUser.find((o) => o.id === userId).nickName
+      this.cmtHolder = `@${userName}:`
+      this.commentPost.rootId = rootId
+      this.commentPost.replyCommentId = replyCommentId
+      this.commentPost.userId = userId
+      this.commentPost.isReply = true
+      this.$refs['cmtInput'].focus()
+    },
+    getComment() {
+      const articleId = this.$route.params.aid
+      this.$http.get(`v1/e/article/${articleId}/comments`, { pageIndex: this.paginationInfo.currentPage }, (coms) => {
+        console.log(coms)
+        this.setPaginationInfo(coms)
+        this.comments = coms.data
+        this.commentUser = coms.userInfo
+      })
+
+      //初始化子评论列表
+      this.paginationInfo2.currentPage = 1
+    },
+    getReply(commentId) {
+      this.$http.get(
+        `v1/e/article/comments/${commentId}`,
+        { pageIndex: this.paginationInfo2.currentPage },
+        (replys) => {
+          this.comments.find((x) => x.commentId === commentId).replies = replys.data
+          this.subCommentUser = replys.userInfo
+        }
+      )
+    },
+    setPaginationInfo(res) {
+      this.paginationInfo.currentPage = res.currentPage
+      this.paginationInfo.totalPages = res.totalPages
+      this.paginationInfo.totalCount = res.totalCount
+      this.paginationInfo.hasPrevious = res.hasPrevious
+      this.paginationInfo.hasNext = res.hasNext
+    },
+    handleRootCommentChange() {
+      this.getComment()
+    },
+    handleSubCommentChange(commentId) {
+      this.getReply(commentId)
+    }
+  },
+  mounted() {
+    this.getComment()
   }
 }
 </script>
@@ -321,6 +483,9 @@ div {
   color: #999;
   background: transparent;
 }
+.remark-action-btn a.remark-reply span:hover {
+  color: #1ea15b;
+}
 
 .remark-action-btn a.remark-reply .t1 {
   display: inline-block;
@@ -397,6 +562,11 @@ a {
   text-align: right;
   visibility: visible;
 }
+.subPage {
+  float: right;
+  visibility: visible;
+}
+
 .floor-action .report {
   float: none;
 }
@@ -404,9 +574,14 @@ a {
   color: #888;
   font-size: 12px;
 }
+.floor-action a:hover {
+  color: #1ea15b;
+}
+
 .floor-action .remark-time {
   color: #999;
 }
+
 .reply-i {
   margin-right: 10px;
   display: inline-block;

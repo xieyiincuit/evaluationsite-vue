@@ -31,7 +31,7 @@ export default {
       this.$router.push({ name: 'home' })
     } catch (e) {
       console.log('logincallback exception:', e)
-      this.$root.$emit('show-snackbar', { message: e })
+      this.$message.error('系统出错，登录失败')
     }
   },
   methods: {

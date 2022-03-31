@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header/>
   <el-config-provider :locale="locale">
     <router-view></router-view>
   </el-config-provider>
@@ -10,8 +10,9 @@
 import Header from './components/layouts/header.vue'
 import Footer from './components/layouts/footer.vue'
 import userAuth from 'src/auth/userauth'
-import { ElConfigProvider } from 'element-plus'
+import {ElConfigProvider} from 'element-plus'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+
 export default {
   name: 'app',
   mixins: [userAuth],
@@ -39,6 +40,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
+
 .element-plus-logo {
   width: 50%;
 }

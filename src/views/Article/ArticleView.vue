@@ -2,7 +2,7 @@
   <div class="container-fluid" v-loading="loading">
     <banner :bannerInfo="bannerInfo" />
     <div class="Mid">
-      <content :content="content" :comments="comments" :commentUser="commentUser" />
+      <content :content="content" />
       <info :authorInfo="authorInfo" :gameInfo="gameInfo" />
     </div>
   </div>
@@ -23,8 +23,6 @@ export default {
     return {
       loading: false,
       content: '',
-      comments: [],
-      commentUser: [],
       bannerInfo: {
         gameName: '',
         createTime: null,
@@ -73,12 +71,6 @@ export default {
             this.setSuggestion(sug)
           })
         })
-
-        this.$http.get(`v1/e/article/${articleId}/comments`, null, (coms) => {
-          console.log(coms)
-          this.comments = coms.data
-          this.commentUser = coms.userInfo
-        })
       })
       this.loading = false
     },
@@ -110,8 +102,7 @@ export default {
       this.bannerInfo.commentsCount = article.commentsCount
       this.bannerInfo.joinCount = article.joinCount
       this.bannerInfo.articleImage = 'http://localhost:9000/' + article.articleImage
-    },
-    setContent() {}
+    }
   },
   mounted() {
     this.getArticle()

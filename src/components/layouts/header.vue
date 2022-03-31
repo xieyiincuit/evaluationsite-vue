@@ -36,7 +36,8 @@
           <button type="button" class="btn btn-outline-success me-3 font-btn" v-show="user == null" @click="login">
             登 录
           </button>
-          <a role="button" href="http://localhost:5105/Account/Register" class="btn btn-outline-info me-3 font-btn" v-show="user == null">
+          <a role="button" href="http://localhost:5105/Account/Register" target="_blank" class="btn btn-outline-info me-3 font-btn"
+             v-show="user == null">
             注 册
           </a>
           <router-link :to="{ name: 'create' }" role="button" class="btn btn-danger btn-rounded me-3 font-btn"
@@ -95,7 +96,7 @@ export default {
       try {
         await applicationUserManager.login()
       } catch (error) {
-        console.log('login in occured error: ', error)
+        console.log('login error: ', error)
         this.$message.error(error)
       }
     },
@@ -108,7 +109,7 @@ export default {
         this.$store.commit('identity/saveToken', '')
         this.$store.commit('identity/saveUserInfo', {})
       } catch (error) {
-        console.log('logout in occured error: ', error)
+        console.log('logout error: ', error)
         this.$message.error(error)
       }
     }

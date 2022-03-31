@@ -4,7 +4,7 @@
     <game-item :gameinfos="gameInfos" />
     <div class="col-sm-12 col-md-12 d-flex justify-content-sm-center">
       <el-pagination v-model:currentPage="this.paginationInfo.currentPage" :page-size="18" :background="true" layout="prev, pager, next"
-                     :total="this.paginationInfo.totalCount" @current-change="handleCurrentChange" />
+                     :total="this.paginationInfo.totalCount" @current-change="handleCurrentChange" :hide-on-single-page="true" />
     </div>
   </div>
 </template>

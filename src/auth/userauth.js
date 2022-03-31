@@ -56,7 +56,7 @@ const userAuth = {
             try {
                 await applicationUserManager.login()
             } catch (error) {
-                console.log('login in occured error: ', error)
+                console.log('login error: ', error)
                 this.$message.error(error)
             }
         },
@@ -69,7 +69,7 @@ const userAuth = {
                 this.$store.commit('identity/saveToken', '')
                 this.$store.commit('identity/saveUserInfo', {})
             } catch (error) {
-                console.log('logout in occured error: ', error)
+                console.log('logout error: ', error)
                 this.$message.error(error)
             }
         }
