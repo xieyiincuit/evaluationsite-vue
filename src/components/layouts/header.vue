@@ -5,7 +5,7 @@
     <div class="container">
       <!-- Navbar brand -->
       <a class="navbar-brand me-2" href="#">
-        <img src="src/assets/logo.webp" height="30" alt="MDB Logo" loading="lazy" style="margin-top: -1px" />
+        <img src="../../assets/logo.webp" height="30" alt="MDB Logo" loading="lazy" style="margin-top: -1px" />
       </a>
 
       <!-- Toggle button -->

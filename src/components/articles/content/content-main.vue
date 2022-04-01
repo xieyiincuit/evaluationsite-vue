@@ -249,6 +249,7 @@ export default {
       this.cmtHolder = `@${userName}:`
       this.commentPost.rootId = commentId
       this.commentPost.replyCommentId = commentId
+      this.commentPost.userId = null
       this.commentPost.isReply = true
       this.$refs['cmtInput'].focus()
     },

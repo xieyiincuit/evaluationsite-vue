@@ -185,15 +185,16 @@ export default {
             articleAddDto.id = articleId
             this.$http.put('v1/e/article', articleAddDto, (res) => {
               this.$message.success('你的测评内容修改成功')
+              this.$router.push({ path: `/article/${articleId}` })
             })
           } else {
             this.$http.post('v1/e/article', articleAddDto, (res) => {
               this.$message.success('你的测评内容创建成功')
               articleId = res.articleId
+              this.$router.push({ path: `/article/${articleId}` })
             })
           }
           this.hasSub = true
-          this.$router.push({ path: `/article/${articleId}` })
         } else {
           this.$message.error('表单校验失败了，来看看是咋回事儿！！')
           return false
