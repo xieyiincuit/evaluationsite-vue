@@ -177,6 +177,9 @@ export default {
       return user.avatar == null ? '' : user.avatar
     },
     IsMyself: function (userId) {
+      if (this.user == null) {
+        return true
+      }
       return userId !== this.user.sub
     },
     async login() {

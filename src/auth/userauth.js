@@ -1,29 +1,13 @@
 import applicationUserManager from "./applicationusermanager";
 
 const userAuth = {
-    data() {
-        return {
-            user: {
-                nickname: "",
-                isAuthenticated: false
-            }
-        };
-    },
     methods: {
         async refreshUserInfo() {
-            const userIds = await applicationUserManager.getUser();
-            if (userIds) {
-                this.user.nickname = userIds.profile.nickname;
-                this.user.isAuthenticated = true;
-                var exdate = this.formatUnixtimestamp(userIds.expires_at);
-                console.log('userInfo refresh exdate is', exdate)
-                this.$store.commit("identity/saveUserInfo", userIds);
-                window.localStorage.setItem("USER_EXP", exdate);
-                window.localStorage.setItem("USER_NICKNAME", this.user.nickname);
-                window.localStorage.setItem("ACCESS_TOKEN", userIds.access_token);
-            } else {
-                this.user.nickname = "";
-                this.user.isAuthenticated = false;
+            const oidcUser = await applicationUserManager.getUser();
+            if (oidcUser != null) {
+                let expireTime = this.formatUnixtimestamp(oidcUser.expires_at);
+                this.$store.commit('identity/saveToken', oidcUser.access_token)
+                this.$store.commit("identity/saveUserInfo", oidcUser);
             }
         },
         //将时间戳转换为2022-03-15 15:50:19的时间
@@ -66,8 +50,6 @@ const userAuth = {
                 window.localStorage.removeItem('ACCESS_TOKEN')
                 window.localStorage.removeItem('USER_EXP')
                 await applicationUserManager.logout()
-                this.$store.commit('identity/saveToken', '')
-                this.$store.commit('identity/saveUserInfo', {})
             } catch (error) {
                 console.log('logout error: ', error)
                 this.$message.error(error)

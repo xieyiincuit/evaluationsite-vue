@@ -19,13 +19,13 @@
         </el-form-item>
         <el-row>
           <el-form-item label="姓名：" prop="nickName">
-            <el-col :span="13">
+            <el-col :span="18">
               <el-input v-model="userForm.nickName" maxlength="30" />
             </el-col>
-            <el-col :span="2">
+            <el-col :span="1">
             </el-col>
-            <el-col :span="9">
-              <el-button type="success" plain @click="checkNickName" v-if="checkChangeName">看看被别人抢了没</el-button>
+            <el-col :span="5">
+              <el-button type="success" plain @click="checkNickName" v-if="checkChangeName">验证</el-button>
             </el-col>
           </el-form-item>
         </el-row>
@@ -80,7 +80,7 @@ export default {
   mixins: [userAuth],
   computed: {
     checkChangeName() {
-      const oldName = window.localStorage.getItem('USER_NICKNAME')
+      let oldName = window.localStorage.getItem('USER_NICKNAME')
       return oldName != this.userForm.nickName
     },
     filereqHeader() {
@@ -221,6 +221,7 @@ export default {
               updateDto,
               (res) => {
                 this.$message.success('用户信息更新成功')
+                window.localStorage.setItem('USER_NICKNAME', updateDto.nickName)
                 this.getUserInfo()
               },
               (err) => {

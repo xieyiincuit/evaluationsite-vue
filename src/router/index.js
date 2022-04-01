@@ -84,13 +84,9 @@ const router = createRouter({
     routes
 })
 
-
 var routerStore = store
 //注册全局前置导航守卫
 router.beforeEach((to, from, next) => {
-    if (!routerStore.state.identity.token) {
-        routerStore.commit("identity/saveToken", window.localStorage.getItem("ACCESS_TOKEN"));
-    }
     if (to.meta.requireAuth) {
         // 判断该路由是否需要认证授权
         if (routerStore.state.identity.token) {

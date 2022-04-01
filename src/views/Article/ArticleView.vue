@@ -81,7 +81,7 @@ export default {
       this.authorInfo.introduction = authorDto.introduction
     },
     setGameInfo(game) {
-      this.gameInfo.gameId = game.Id
+      this.gameInfo.gameId = game.id
       this.gameInfo.gameName = game.name
       this.gameInfo.score = game.averageScore
       this.gameInfo.roughPic = game.roughPicture

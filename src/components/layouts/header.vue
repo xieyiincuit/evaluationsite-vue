@@ -5,8 +5,7 @@
     <div class="container">
       <!-- Navbar brand -->
       <a class="navbar-brand me-2" href="#">
-        <img src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp" height="30" alt="MDB Logo" loading="lazy"
-             style="margin-top: -1px" />
+        <img src="src/assets/logo.webp" height="30" alt="MDB Logo" loading="lazy" style="margin-top: -1px" />
       </a>
 
       <!-- Toggle button -->
@@ -106,8 +105,6 @@ export default {
         window.localStorage.removeItem('ACCESS_TOKEN')
         window.localStorage.removeItem('USER_EXP')
         await applicationUserManager.logout()
-        this.$store.commit('identity/saveToken', '')
-        this.$store.commit('identity/saveUserInfo', {})
       } catch (error) {
         console.log('logout error: ', error)
         this.$message.error(error)

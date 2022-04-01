@@ -34,7 +34,7 @@ function filterNull(o) {
 var requestStore = store
 axios.interceptors.request.use(
     config => {
-        console.log("request interceptors log  | url:" + config.url, " method:" + config.method, " params:" + config.params)
+        console.log("request | url:" + config.url, " method:" + config.method, " params:" + config.params)
         if (requestStore.state.identity.token) {
             // 判断是否存在token，如果存在的话，则每个http header都加上token
             config.headers.Authorization = "Bearer " + requestStore.state.identity.token;

@@ -7,8 +7,12 @@ class ApplicationUserManager extends UserManager {
             client_id: 'evaluationsitevuejs',
             redirect_uri: 'http://localhost:3000/callback',
             response_type: 'id_token token',
-            scope: 'openid profile email eval-write ordering-buy',
-            post_logout_redirect_uri: 'http://localhost:3000/'
+            scope: 'openid profile email eval-write ordering-buy offline_access',
+            post_logout_redirect_uri: 'http://localhost:3000/',
+            accessTokenExpiringNotificationTime: 10,
+            automaticSilentRenew: true,
+            filterProtocolClaims: true,
+            loadUserInfo: true
         })
     }
 
