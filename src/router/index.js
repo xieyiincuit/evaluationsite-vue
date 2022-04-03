@@ -12,6 +12,10 @@ import LoginCallbackView from '../views/User/LoginCallbackView.vue'
 import FindGameView from '../views/Game/FindGameView.vue'
 import GameDetailView from '../views/Game/GameDetailView.vue'
 
+import ShopListView from '../views/Shop/ShopListView.vue'
+import ShopBuyView from '../views/Shop/ShopBuyView.vue'
+
+
 import NotFoundView from '../views/NotFoundView.vue'
 import applicationUserManager from "../auth/applicationusermanager";
 
@@ -68,6 +72,16 @@ const routes = [
         component: GameDetailView,
     },
     {
+        path: '/shop',
+        name: 'shopList',
+        component: ShopListView,
+    },
+    {
+        path: '/shop/:id',
+        name: 'shopItem',
+        component: ShopBuyView,
+    },
+    {
         path: "/callback",
         name: "loginCallBack",
         component: LoginCallbackView,
@@ -88,6 +102,9 @@ var routerStore = store
 //注册全局前置导航守卫
 router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) {
+        if (!routerStore.state.identity.token) {
+            routerStore.state.identity.token = window.localStorage.getItem("ACCESS_TOKEN")
+        }
         // 判断该路由是否需要认证授权
         if (routerStore.state.identity.token) {
             // 通过vuex state获取当前的token是否存在

@@ -294,6 +294,7 @@ a {
 }
 
 .YXXX-R .div2 div.bdr {
+  padding-top: 4px;
   padding-right: 5px;
   width: 20px;
   height: 26px;
@@ -310,6 +311,7 @@ a {
 }
 
 .YXXX-R .div2 div.clock {
+  padding-top: 5px;
   height: 26px;
   line-height: 26px;
   color: #666;
