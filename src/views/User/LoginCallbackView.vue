@@ -30,7 +30,6 @@ export default {
       window.localStorage.setItem('ACCESS_TOKEN', user.access_token)
       this.$router.push({ name: 'home' })
     } catch (e) {
-      console.log('logincallback exception:', e)
       this.$message.error('系统出错，登录失败')
     }
   },

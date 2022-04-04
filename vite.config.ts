@@ -13,7 +13,6 @@ export default defineConfig({
         alias: {
             '~/': `${pathSrc}/`,
             '/images': 'src/assets/images',
-            '/pic': 'src/assets/images/pic',
             styles: path.resolve(__dirname, 'src/styles'),
             router: path.resolve(__dirname, 'src/router'),
             views: path.resolve(__dirname, 'src/views'),
@@ -42,4 +41,11 @@ export default defineConfig({
             dts: path.resolve(pathSrc, 'components.d.ts'),
         }),
     ],
+    // 配置前端服务地址和端口
+    server: {
+        host: 'localhost',
+        port: 3000,
+        // 是否开启 https
+        https: false,
+    },
 })

@@ -103,7 +103,7 @@ var routerStore = store
 router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) {
         if (!routerStore.state.identity.token) {
-            routerStore.state.identity.token = window.localStorage.getItem("ACCESS_TOKEN")
+            routerStore.commit('identity/saveToken', window.localStorage.getItem("ACCESS_TOKEN"))
         }
         // 判断该路由是否需要认证授权
         if (routerStore.state.identity.token) {
