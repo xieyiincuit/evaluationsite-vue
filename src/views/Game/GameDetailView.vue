@@ -82,11 +82,6 @@ export default {
   },
   mounted() {
     this.getGameInfo()
-  },
-  watch: {
-    $route(to) {
-      this.getGameInfo()
-    }
   }
 }
 </script>

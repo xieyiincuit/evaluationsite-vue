@@ -53,6 +53,9 @@
                 <router-link class="dropdown-item" :to="{ path:'/my/articles' }">我的文章</router-link>
               </li>
               <li>
+                <router-link class="dropdown-item" :to="{ path:'/mygame' }">我的游戏</router-link>
+              </li>
+              <li>
                 <router-link class="dropdown-item" :to="{ path:'/my' }">个人信息</router-link>
               </li>
               <li>
@@ -83,9 +86,7 @@ export default {
     avatar() {
       const user = this.$store.state.identity.user
       if (user) {
-        return user.avatar == 'default'
-          ? 'https://mdbcdn.b-cdn.net/img/new/avatars/2.webp'
-          : 'http://localhost:9000/' + user.avatar
+        return 'http://localhost:9000/' + user.avatar
       }
       return ''
     }

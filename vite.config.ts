@@ -41,11 +41,4 @@ export default defineConfig({
             dts: path.resolve(pathSrc, 'components.d.ts'),
         }),
     ],
-    // 配置前端服务地址和端口
-    server: {
-        host: 'localhost',
-        port: 3000,
-        // 是否开启 https
-        https: false,
-    },
 })

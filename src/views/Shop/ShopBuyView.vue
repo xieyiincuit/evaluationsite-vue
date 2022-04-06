@@ -1,20 +1,20 @@
 <template>
-  <div class="container">
+  <div class="container" v-loading="loading">
     <div class="products_top">
       <div class="products_top_t">
         <div class="products_top_t_l">
-          <p class="title">騎馬與砍殺：戰團</p>
-          <p class="etitle">2010.03.31上市<span>|</span>角色扮演RPG<span>|</span>支持中文</p>
+          <p class="title">{{shop.gameName}}</p>
+          <p class="etitle">{{formatSellTime(shop.sellTime)}}上市<span>|</span>{{shop.gameCategory}}<span>|</span>支持中文</p>
         </div>
       </div>
       <div class="products_top_l">
-        <div class="products_top_l_con"><img src="//img.fhyx.com/steam/48700/2.jpg"></div>
+        <div class="products_top_l_con"><img :src="`http://localhost:9000/${shop.gamePicture}`"></div>
       </div>
       <div class="products_top_r">
         <div class="commodity_info">
-          <img class="img" src="https://img.fhyx.com/uploads/2020/10/02/2020100210212759.jpg">
+          <img class="img" :src="`http://localhost:9000/${shop.picture}`">
           <div class="c_info">
-            <p class="title">騎馬與砍殺：戰團</p>
+            <p class="title">{{shop.gameName}}</p>
           </div>
         </div>
         <div class="version ">
@@ -26,20 +26,20 @@
           </div>
           <div>
             <div class="p_version"><span class="title">SDK版本：</span>
-              <div class="p_version_ul"><a href="javascript:void(0)" class="active" data-attr-id="9687">简/繁体中文</a></div>
+              <div class="p_version_ul"><a href="javascript:void(0)" class="active">简/繁体中文</a></div>
             </div>
           </div>
         </div>
         <div class="price_info">
-          <span class="price">¥26.00</span>
+          <span class="price">¥{{shop.finalPrice}}</span>
           <p class="oldprice">
-            <span class="hk_price" style="line-height: 20px;">HK$ 31.99</span>
-            <span class="old_price" style="line-height: 20px;">¥99.00</span>
+            <span class="hk_price" style="line-height: 20px;">HK$ {{shop.finalPrice * 1.2}}</span>
+            <span class="old_price" style="line-height: 20px;">¥{{shop.price}}</span>
           </p>
-          <span class="zk">-74%</span>
+          <span class="zk">-{{100 - shop.discount}}%</span>
         </div>
         <div class="gm_btn">
-          <span class="buy_btn">立即购买</span>
+          <span class="buy_btn" @click="buyItem">立即购买</span>
         </div>
       </div>
     </div>
@@ -48,28 +48,86 @@
         <div class="products_con_left_gamejs">
           <div class="products_con_left_gamejs_title">游戏介绍</div>
           <div class="products_con_left_gamejs_con">
-            <p>在一塊被無盡的戰争所四分五裂的土地上，是時候該建立一個屬于您自己的的戰團，并投入戰鬥了。統領您的那些經驗老道的将士們披挂上陣，擴充您的疆域并獲取終極的權力：登上卡拉迪亞大陸的寶座！
-              《騎馬與砍殺：戰團》是一款備受期待的獨立資料片，它通過栩栩如生的騎馬戰鬥和詳細的戰鬥系統向玩家重現了中世紀的戰場。
-            </p>
+            <p>{{shop.gameDescription}}</p>
           </div>
         </div>
       </div>
       <div class="products_con_right">
         <div class="products_con_right_products_con">
           <div class="changshang_type">
-            <p class="title"><span>游戏开发：</span>TaleWorlds Entertainment</p>
-            <p class="title"><span>游戏发售：</span>TaleWorlds Entertainment</p>
-            <p class="title"><span>类型：</span>角色扮演</p>
-            <p class="title"><span>上市时间：</span>2010年03月31日</p>
+            <p class="title"><span>游戏开发：</span>{{shop.gameIssue}}</p>
+            <p class="title"><span>游戏发售：</span>{{shop.gameIssue}}</p>
+            <p class="title"><span>类型：</span>{{shop.gameCategory}}</p>
+            <p class="title"><span>上市时间：</span>{{formatSellTime(shop.sellTime)}}</p>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <el-dialog v-model="centerDialogVisible" title="购买成功" width="20%" center>
+    <span style="font-size:14px">游戏购买成功，SDK已发放，去激活拥有该游戏吧</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="centerDialogVisible = false">知道了</el-button>
+        <el-button type="success" @click="toMyGame">去激活</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
-export default {}
+import util from 'src/utils/date'
+import applicationUserManager from 'src/auth/applicationusermanager'
+export default {
+  data() {
+    return {
+      loading: true,
+      centerDialogVisible: false,
+      shop: {}
+    }
+  },
+  methods: {
+    formatSellTime: function (sellTime) {
+      return !sellTime || sellTime == '' ? '' : util.formatDate.format(new Date(sellTime), 'yyyy-MM-dd')
+    },
+    getShopDetail() {
+      const shopId = this.$route.params.id
+      this.$http.get(
+        `v1/s/${shopId}`,
+        null,
+        (res) => {
+          this.shop = res
+          this.loading = false
+        },
+        (fail) => {}
+      )
+    },
+    buyItem() {
+      let user = this.$store.state.identity.user
+      if (user == null) {
+        this.login()
+      } else {
+        const shopId = this.$route.params.id
+        this.$http.post('v1/o/item/' + shopId, null, (res) => {
+          this.centerDialogVisible = true
+        })
+      }
+    },
+    async login() {
+      try {
+        await applicationUserManager.login()
+      } catch (error) {
+        console.log('login error: ', error)
+        this.$message.error(error)
+      }
+    },
+    toMyGame() {}
+  },
+  mounted() {
+    this.getShopDetail()
+  }
+}
 </script>
 
 <style scoped>

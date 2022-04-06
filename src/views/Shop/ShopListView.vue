@@ -1,43 +1,49 @@
 <template>
-  <div class="container">
+  <div class="container" v-loading="loading">
     <div class="fhyx_clist">
       <div class="fhyx_clist_tab">
-        <span class="checked" data-id="1">新品</span>
-        <span data-id="2">热销</span>
-        <span data-id="4">折扣</span>
+        <template v-for="type in orderType.data" :key="type.id">
+          <router-link @click="typeSelected(type.id)" :class="{ checked: orderType.active == type.id }"
+                       :to="{ path: '/shop', query: { pageIndex: paginationInfo.currentPage, orderby: type.id } }">
+            {{type.name}}
+          </router-link>
+        </template>
       </div>
       <div class="fhyx_clist_c">
-        <div class="fhyx_clist_ul">
-          <router-link :to="`/shop/${index}`" class="fhyx_clist_li checked" v-for="index in this.liCount" :key="index">
-            <img src="https://img.fhyx.com/uploads/steam/w_img/1882040.jpg">
-            <div class="fhyx_clist_li_des">
-              <p class="title">沙盒勇者</p>
-              <p class="content"><span>8.3</span> | 2022.04.01 | 角色扮演RPG</p>
-            </div>
-            <div class="fhyx_clist_li_price"><span class="zk">-10%</span>
-              <div class="price_c"><span class="oldprice">¥22.00</span><span class="price">¥19.80</span></div>
-            </div>
-          </router-link>
+        <div class="fhyx_clist_ul" v-if="shops !== null">
+          <template v-for="shop in shops" :key="shop.id">
+            <router-link :to="`/shop/${shop.id}`" class="fhyx_clist_li" @mouseout="shopSelected(shop.id, shop.gameId)"
+                         :class="{ checked: articePop.active === shop.id }">
+              <img :src="`http://localhost:9000/${shop.picture}`">
+              <div class="fhyx_clist_li_des">
+                <p class="title">{{shop.gameName}}</p>
+                <p class="content"><span>{{shop.gameScore}}</span> | {{formatSellTime(shop.sellTime)}} | {{shop.gameCategory}}</p>
+              </div>
+              <div class="fhyx_clist_li_price"><span class="zk">-{{100 - shop.discount}}%</span>
+                <div class="price_c"><span class="oldprice">¥{{shop.price}}</span><span class="price">¥{{shop.finalPrice}}</span></div>
+              </div>
+            </router-link>
+          </template>
         </div>
         <div class="fhyx_clist_li_c">
-          <p class="title">沙盒勇者</p>
+          <p class="title">{{articePop.data.gameName}}</p>
           <div class="tag">
             <a>抢先体验</a><a>角色扮演</a><a>模拟</a><a>沙盒</a><a>策略角色扮演</a><a>角色动作</a>
           </div>
           <div class="c_img">
-            <img src="//img.fhyx.com/uploads/steam/1750740/01648786333.jpg">
+            <img :src="`http://localhost:9000/${articePop.data.gamePicture}`">
           </div>
-          <p class="article">给您推荐的优秀测评：</p>
-          <a href="javascript:;">
-            <p class="atitle">《沙盒勇者》：一款经典的角色扮演2D游戏</p>
-            <p class="adescription">这里是测评简介，这里是测评简介，这里是测评简介，这里是测评简介</p>
-          </a>
+          <p class="article" v-show="articePop.data !== null">推荐的优秀测评：</p>
+          <router-link :to="`/article/${articePop.data.articleId}`" v-show="articePop.data !== null">
+            <p class="atitle">《{{articePop.data.gameName}}》：{{articePop.data.articleTitle}}</p>
+            <p class="adescription">{{articePop.data.articleDescription}}</p>
+          </router-link>
         </div>
       </div>
       <div class="row mt-3 mb-3">
         <div class="col-sm-12 col-md-10 col-lg-8 d-flex justify-content-sm-center">
           <el-pagination v-model:currentPage="this.paginationInfo.currentPage" :page-size="8" :background="true" layout="prev, pager, next"
-                         :total="this.paginationInfo.totalCount" @current-change="handleCurrentChange" />
+                         :total="this.paginationInfo.totalCount" @current-change="handleCurrentChange" :hide-on-single-page="true" />
         </div>
       </div>
     </div>
@@ -45,21 +51,128 @@
 </template>
 
 <script>
+import util from 'src/utils/date'
+
 export default {
   data() {
     return {
-      liCount: 8,
+      loading: true,
       paginationInfo: {
         currentPage: 1,
         totalPages: 0,
         hasPrevious: false,
         hasNext: true,
         totalCount: 10
+      },
+      orderType: {
+        active: 0,
+        data: [
+          {
+            id: 0,
+            name: '新品'
+          },
+          {
+            id: 1,
+            name: '折扣'
+          },
+          {
+            id: 2,
+            name: '热销'
+          }
+        ]
+      },
+      shops: [],
+      articles: [],
+      articePop: {
+        active: 0,
+        data: {
+          gameName: '',
+          gamePicture: '',
+          articleId: null,
+          articleTitle: '',
+          articleDescription: ''
+        }
       }
     }
   },
   methods: {
-    handleCurrentChange() {}
+    formatSellTime: function (sellTime) {
+      return !sellTime || sellTime == '' ? '' : util.formatDate.format(new Date(sellTime), 'yyyy-MM-dd')
+    },
+    getShopList() {
+      let orderby = this.$route.query.orderby
+      if (!orderby) {
+        orderby = 0
+      }
+      this.$http.get(
+        'v1/s/items',
+        { pageIndex: this.paginationInfo.currentPage, orderby: orderby },
+        (shop) => {
+          this.setPaginationInfo(shop)
+          this.shops = shop.data
+          this.articles = shop.articles
+
+          //初始化
+          this.articePop.active = shop.data[0].id
+          this.articePop.data.gameName = shop.data[0].gameName
+          this.articePop.data.gamePicture = shop.data[0].gamePicture
+          let article = this.articles.find((x) => x.gameId === shop.data[0].gameId)
+          console.log(article)
+          if (article == null) {
+            this.articePop.data = null
+          } else {
+            this.articePop.data.articleId = article.articleId
+            this.articePop.data.articleTitle = article.title
+            this.articePop.data.articleDescription = article.description
+          }
+
+          this.loading = false
+        },
+        (fail) => {
+          if (fail.status == 404) {
+            this.paginationInfo.totalCount = 0
+            this.shops = null
+            this.articles = null
+            this.loading = false
+          }
+        }
+      )
+    },
+    handleCurrentChange() {
+      this.getShopList()
+    },
+    setPaginationInfo(res) {
+      this.paginationInfo.currentPage = res.currentPage
+      this.paginationInfo.totalPages = res.totalPages
+      this.paginationInfo.totalCount = res.totalCount
+      this.paginationInfo.hasPrevious = res.hasPrevious
+      this.paginationInfo.hasNext = res.hasNext
+    },
+    typeSelected(typeId) {
+      this.orderType.active = typeId
+    },
+    shopSelected(shopId, gameId) {
+      this.articePop.active = shopId
+      let article = this.articles.find((x) => x.gameId === gameId)
+      let game = this.shops.find((x) => x.id === shopId)
+      if (!article) {
+        this.articePop.data = null
+      } else {
+        this.articePop.data.gameName = game.gameName
+        this.articePop.data.gamePicture = game.gamePicture
+        this.articePop.data.articleId = article.articleId
+        this.articePop.data.articleTitle = article.title
+        this.articePop.data.articleDescription = article.description
+      }
+    }
+  },
+  mounted() {
+    this.getShopList()
+  },
+  watch: {
+    $route(to) {
+      this.getShopList()
+    }
   }
 }
 </script>
@@ -75,7 +188,7 @@ export default {
   width: 100%;
   height: 43px;
 }
-.fhyx_clist_tab span {
+.fhyx_clist_tab a {
   float: left;
   width: 60px;
   height: 30px;
@@ -86,12 +199,12 @@ export default {
   position: relative;
   cursor: pointer;
 }
-.fhyx_clist_tab span.checked {
+.fhyx_clist_tab a.checked {
   font-size: 22px;
   color: #333333;
   font-weight: bold;
 }
-.fhyx_clist_tab span.checked:after {
+.fhyx_clist_tab a.checked:after {
   content: '';
   position: absolute;
   bottom: -13px;
@@ -234,7 +347,7 @@ img {
 .fhyx_clist_li_c {
   float: right;
   width: 384px;
-  height: 468px;
+  height: auto;
   background-color: #ffffff;
   box-shadow: 0px 3px 6px 0px rgb(0 0 0 / 16%);
   border-radius: 8px;

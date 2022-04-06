@@ -1,5 +1,5 @@
 <template>
-  <div class="Mid_L">
+  <div class="Mid_L" v-loading="loading">
     <div class="MidLcon">
       <span v-html="content"></span>
     </div>
@@ -124,6 +124,7 @@ export default {
   props: ['content'],
   data() {
     return {
+      loading: true,
       cmtHolder: '来说两句吧',
       comments: [],
       commentUser: [],
@@ -269,6 +270,7 @@ export default {
         this.setPaginationInfo(coms)
         this.comments = coms.data
         this.commentUser = coms.userInfo
+        this.loading = false
       })
 
       //初始化子评论列表

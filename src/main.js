@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import router from './router'
 import store from './store'
 import App from "./App.vue"
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 // Global Css
 import "~/styles/index.scss";
@@ -21,6 +21,7 @@ const app = createApp(App);
 
 app.config.globalProperties.$http = http;
 app.config.globalProperties.$message = ElMessage;
+app.config.globalProperties.$alert = ElMessageBox;
 
 app.use(router)
 app.use(store)
