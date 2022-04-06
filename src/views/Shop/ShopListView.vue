@@ -9,8 +9,8 @@
           </router-link>
         </template>
       </div>
-      <div class="fhyx_clist_c">
-        <div class="fhyx_clist_ul" v-if="shops !== null">
+      <div class="fhyx_clist_c" v-if="shops.length !== 0">
+        <div class="fhyx_clist_ul">
           <template v-for="shop in shops" :key="shop.id">
             <router-link :to="`/shop/${shop.id}`" class="fhyx_clist_li" @mouseout="shopSelected(shop.id, shop.gameId)"
                          :class="{ checked: articePop.active === shop.id }">
@@ -25,7 +25,7 @@
             </router-link>
           </template>
         </div>
-        <div class="fhyx_clist_li_c">
+        <div class="fhyx_clist_li_c" v-if="shops !== null">
           <p class="title">{{articePop.data.gameName}}</p>
           <div class="tag">
             <a>抢先体验</a><a>角色扮演</a><a>模拟</a><a>沙盒</a><a>策略角色扮演</a><a>角色动作</a>
@@ -47,6 +47,9 @@
         </div>
       </div>
     </div>
+    <template v-if="shops.length === 0">
+      <el-empty :image-size="200" description="没有找到你想要游戏，我们会持续添加的 ^ ^" />
+    </template>
   </div>
 </template>
 

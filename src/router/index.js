@@ -7,6 +7,7 @@ import ArticleAddView from '../views/Article/ArticleAddView.vue'
 
 import UserArticleListView from '../views/User/UserArticleListView.vue'
 import UserInfoView from '../views/User/UserInfoView.vue'
+import UserGameListView from '../views/User/UserGameListView.vue'
 import LoginCallbackView from '../views/User/LoginCallbackView.vue'
 
 import FindGameView from '../views/Game/FindGameView.vue'
@@ -39,6 +40,14 @@ const routes = [
         path: '/my',
         name: 'userinfo',
         component: UserInfoView,
+        meta: {
+            requireAuth: true//表面此路由需要身份认证授权
+        }
+    },
+    {
+        path: '/mygame',
+        name: 'usergame',
+        component: UserGameListView,
         meta: {
             requireAuth: true//表面此路由需要身份认证授权
         }
