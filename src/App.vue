@@ -7,29 +7,24 @@
 </template>
 
 <script>
-import Header from './components/layouts/header.vue'
-import Footer from './components/layouts/footer.vue'
-import userAuth from 'src/auth/userauth'
-import { ElConfigProvider } from 'element-plus'
-import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+import Header from "./components/layouts/header.vue";
+import Footer from "./components/layouts/footer.vue";
+import userAuth from "src/auth/userauth";
+import { ElConfigProvider } from "element-plus";
+import zhCn from "element-plus/lib/locale/lang/zh-cn";
 
 export default {
-  name: 'app',
+  name: "app",
   mixins: [userAuth],
   components: {
     Header,
     Footer,
-    ElConfigProvider
-  },
-  watch: {
-    $route: async function (to, from) {
-      await this.refreshUserInfo()
-    }
+    ElConfigProvider,
   },
   setup() {
     return {
-      locale: zhCn
-    }
-  }
-}
+      locale: zhCn,
+    };
+  },
+};
 </script>

@@ -9,7 +9,6 @@ const userAuth = {
                 this.$store.commit('identity/saveToken', oidcUser.access_token)
                 this.$store.commit("identity/saveUserInfo", oidcUser);
                 window.localStorage.setItem('USER_EXP', expireTime)
-                window.localStorage.setItem('USER_NICKNAME', oidcUser.profile.nickname)
                 window.localStorage.setItem('ACCESS_TOKEN', oidcUser.access_token)
             }
         },

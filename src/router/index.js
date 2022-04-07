@@ -18,7 +18,6 @@ import GameDetailView from '../views/Game/GameDetailView.vue'
 import ShopListView from '../views/Shop/ShopListView.vue'
 import ShopBuyView from '../views/Shop/ShopBuyView.vue'
 
-
 import NotFoundView from '../views/NotFoundView.vue'
 import applicationUserManager from "../auth/applicationusermanager";
 
@@ -35,7 +34,7 @@ const routes = [
         name: 'myarticles',
         component: UserArticleListView,
         meta: {
-            requireAuth: true//表面此路由需要身份认证授权
+            requireAuth: true
         }
     },
     {
@@ -43,7 +42,7 @@ const routes = [
         name: 'userinfo',
         component: UserInfoView,
         meta: {
-            requireAuth: true//表面此路由需要身份认证授权
+            requireAuth: true
         }
     },
     {
@@ -51,7 +50,7 @@ const routes = [
         name: 'usergame',
         component: UserGameListView,
         meta: {
-            requireAuth: true//表面此路由需要身份认证授权
+            requireAuth: true
         }
     },
     {
@@ -69,7 +68,7 @@ const routes = [
         name: 'create',
         component: ArticleAddView,
         meta: {
-            requireAuth: true//表面此路由需要身份认证授权
+            requireAuth: true
         }
     },
     {
@@ -77,7 +76,7 @@ const routes = [
         name: 'approve',
         component: UserApproveView,
         meta: {
-            requireAuth: true//表面此路由需要身份认证授权
+            requireAuth: true
         }
     },
     {

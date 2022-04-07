@@ -336,7 +336,6 @@ export default {
             );
           } else {
             //重设密码
-            console.log(formName);
             var passwordDto = {
               oldpassword: this.resetForm.oldpass,
               newPassword: this.resetForm.newpass,
