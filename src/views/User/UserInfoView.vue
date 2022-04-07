@@ -7,12 +7,12 @@
 </template>
 
 <script>
-import userInfo from '../../components/user/user-info.vue'
+import userInfo from "../../components/user/user-info.vue";
 export default {
   components: {
-    'user-info': userInfo
-  }
-}
+    "user-info": userInfo,
+  },
+};
 </script>
 
 <style scoped>

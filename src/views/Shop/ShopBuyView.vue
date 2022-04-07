@@ -1,5 +1,8 @@
 <template>
-  <div class="container" v-loading="loading">
+  <div
+    class="container"
+    v-loading="loading"
+  >
     <div class="products_top">
       <div class="products_top_t">
         <div class="products_top_t_l">
@@ -12,7 +15,10 @@
       </div>
       <div class="products_top_r">
         <div class="commodity_info">
-          <img class="img" :src="`http://localhost:9000/${shop.picture}`">
+          <img
+            class="img"
+            :src="`http://localhost:9000/${shop.picture}`"
+          >
           <div class="c_info">
             <p class="title">{{shop.gameName}}</p>
           </div>
@@ -21,25 +27,40 @@
           <div class="p_pid">
             <span class="title">游玩平台:</span>
             <div class="p_pid_ul">
-              <a href="javascript:void(0)" class="detail_ico hk_steam active"></a>
+              <a
+                href="javascript:void(0)"
+                class="detail_ico hk_steam active"
+              ></a>
             </div>
           </div>
           <div>
             <div class="p_version"><span class="title">SDK版本：</span>
-              <div class="p_version_ul"><a href="javascript:void(0)" class="active">简/繁体中文</a></div>
+              <div class="p_version_ul"><a
+                  href="javascript:void(0)"
+                  class="active"
+                >简/繁体中文</a></div>
             </div>
           </div>
         </div>
         <div class="price_info">
           <span class="price">¥{{shop.finalPrice}}</span>
           <p class="oldprice">
-            <span class="hk_price" style="line-height: 20px;">HK$ {{shop.finalPrice * 1.2}}</span>
-            <span class="old_price" style="line-height: 20px;">¥{{shop.price}}</span>
+            <span
+              class="hk_price"
+              style="line-height: 20px;"
+            >HK${{shop.finalPrice * 1.2}}</span>
+            <span
+              class="old_price"
+              style="line-height: 20px;"
+            >¥{{shop.price}}</span>
           </p>
           <span class="zk">-{{100 - shop.discount}}%</span>
         </div>
         <div class="gm_btn">
-          <span class="buy_btn" @click="buyItem">立即购买</span>
+          <span
+            class="buy_btn"
+            @click="buyItem"
+          >立即购买</span>
         </div>
       </div>
     </div>
@@ -65,69 +86,84 @@
     </div>
   </div>
 
-  <el-dialog v-model="centerDialogVisible" title="购买成功" width="20%" center>
+  <el-dialog
+    v-model="centerDialogVisible"
+    title="购买成功"
+    width="20%"
+    center
+  >
     <span style="font-size:14px">游戏购买成功，SDK已发放，去激活拥有该游戏吧</span>
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="centerDialogVisible = false">知道了</el-button>
-        <el-button type="success" @click="toMyGame">去激活</el-button>
+        <el-button
+          type="primary"
+          @click="centerDialogVisible = false"
+        >知道了</el-button>
+        <el-button
+          type="success"
+          @click="toMyGame"
+        >去激活</el-button>
       </span>
     </template>
   </el-dialog>
 </template>
 
 <script>
-import util from 'src/utils/date'
-import applicationUserManager from 'src/auth/applicationusermanager'
+import util from "src/utils/date";
+import applicationUserManager from "src/auth/applicationusermanager";
 export default {
   data() {
     return {
       loading: true,
       centerDialogVisible: false,
-      shop: {}
-    }
+      shop: {},
+    };
   },
   methods: {
     formatSellTime: function (sellTime) {
-      return !sellTime || sellTime == '' ? '' : util.formatDate.format(new Date(sellTime), 'yyyy-MM-dd')
+      return !sellTime || sellTime == ""
+        ? ""
+        : util.formatDate.format(new Date(sellTime), "yyyy-MM-dd");
     },
     getShopDetail() {
-      const shopId = this.$route.params.id
+      const shopId = this.$route.params.id;
       this.$http.get(
         `v1/s/${shopId}`,
         null,
         (res) => {
-          this.shop = res
-          this.loading = false
+          this.shop = res;
+          this.loading = false;
         },
         (fail) => {}
-      )
+      );
     },
     buyItem() {
-      let user = this.$store.state.identity.user
+      let user = this.$store.state.identity.user;
       if (user == null) {
-        this.login()
+        this.login();
       } else {
-        const shopId = this.$route.params.id
-        this.$http.post('v1/o/item/' + shopId, null, (res) => {
-          this.centerDialogVisible = true
-        })
+        const shopId = this.$route.params.id;
+        this.$http.post("v1/o/item/" + shopId, null, (res) => {
+          this.centerDialogVisible = true;
+        });
       }
     },
     async login() {
       try {
-        await applicationUserManager.login()
+        await applicationUserManager.login();
       } catch (error) {
-        console.log('login error: ', error)
-        this.$message.error(error)
+        console.log("login error: ", error);
+        this.$message.error(error);
       }
     },
-    toMyGame() {}
+    toMyGame() {
+      this.$router.push({ path: "/mygame" });
+    },
   },
   mounted() {
-    this.getShopDetail()
-  }
-}
+    this.getShopDetail();
+  },
+};
 </script>
 
 <style scoped>
@@ -433,7 +469,7 @@ span {
   color: #474747;
 }
 .products_con_left_gamejs_title:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   bottom: 0;

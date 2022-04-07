@@ -7,6 +7,8 @@ import ArticleAddView from '../views/Article/ArticleAddView.vue'
 
 import UserArticleListView from '../views/User/UserArticleListView.vue'
 import UserInfoView from '../views/User/UserInfoView.vue'
+import UserApproveView from '../views/User/UserApproveView.vue'
+
 import UserGameListView from '../views/User/UserGameListView.vue'
 import LoginCallbackView from '../views/User/LoginCallbackView.vue'
 
@@ -66,6 +68,14 @@ const routes = [
         path: '/article/create',
         name: 'create',
         component: ArticleAddView,
+        meta: {
+            requireAuth: true//表面此路由需要身份认证授权
+        }
+    },
+    {
+        path: '/my/approve',
+        name: 'approve',
+        component: UserApproveView,
         meta: {
             requireAuth: true//表面此路由需要身份认证授权
         }

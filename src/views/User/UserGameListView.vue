@@ -1,24 +1,53 @@
 <template>
-  <div class="container" v-loading="loading">
+  <div
+    class="container"
+    v-loading="loading"
+  >
     <div class="fhyx_clist">
       <div class="fhyx_clist_tab">
-        <template v-for="type in orderType.data" :key="type.id">
-          <router-link @click="typeSelected(type.id)" :class="{ checked: orderType.active == type.id }"
-                       :to="{ path: '/mygame', query: { pageIndex: paginationInfo.currentPage, hasChecked: type.value } }">
+        <template
+          v-for="type in orderType.data"
+          :key="type.id"
+        >
+          <router-link
+            @click="typeSelected(type.id)"
+            :class="{ checked: orderType.active == type.id }"
+            :to="{ path: '/mygame', query: { pageIndex: paginationInfo.currentPage, hasChecked: type.value } }"
+          >
             {{type.name}}
           </router-link>
         </template>
       </div>
-      <div class="fhyx_clist_c" v-if="this.sdks.length !== 0">
+      <div
+        class="fhyx_clist_c"
+        v-if="this.sdks.length !== 0"
+      >
         <div class="fhyx_clist_ul">
-          <template v-for="sdk in sdks" :key="sdk.id">
+          <template
+            v-for="sdk in sdks"
+            :key="sdk.id"
+          >
             <div class="fhyx_clist_li">
               <img :src="`http://localhost:9000/${sdk.gamePictrue}`">
               <div class="fhyx_clist_li_des">
                 <p class="title">{{sdk.gameName}}</p>
                 <p class="content">{{formatBuyTime(sdk.sendTime)}} | SDK:{{sdk.sdkString}}</p>
               </div>
-              <div class="fhyx_clist_li_price"><button class="zk" @click="checkSDK(sdk.id)">Check</button>
+              <div
+                class="fhyx_clist_li_price"
+                v-if="!sdk.hasChecked"
+              ><button
+                  class="zk"
+                  @click="checkSDK(sdk.id)"
+                >校验</button>
+              </div>
+              <div
+                class="fhyx_clist_li_price"
+                v-if="sdk.hasChecked"
+              ><button
+                  class="pf"
+                  @click="prepareDialog(sdk.gameId)"
+                >评分</button>
               </div>
             </div>
           </template>
@@ -26,109 +55,199 @@
       </div>
       <div class="row mt-3 mb-3">
         <div class="col-sm-12 col-md-10 col-lg-8 d-flex justify-content-sm-center">
-          <el-pagination v-model:currentPage="this.paginationInfo.currentPage" :page-size="10" :background="true" layout="prev, pager, next"
-                         :total="this.paginationInfo.totalCount" @current-change="handleCurrentChange" :hide-on-single-page="true" />
+          <el-pagination
+            v-model:currentPage="this.paginationInfo.currentPage"
+            :page-size="10"
+            :background="true"
+            layout="prev, pager, next"
+            :total="this.paginationInfo.totalCount"
+            @current-change="handleCurrentChange"
+            :hide-on-single-page="true"
+          />
         </div>
       </div>
       <template v-if="this.sdks.length === 0">
-        <el-empty class="fhyx_clist_c" :image-size="200" description="你没有拥有任何游戏，去使用你的SDK吧" />
+        <el-empty
+          class="fhyx_clist_c"
+          :image-size="200"
+          description="你没有拥有任何游戏"
+        />
       </template>
     </div>
-
   </div>
+
+  <el-dialog
+    v-model="centerDialogVisible"
+    title="游戏评分"
+    width="30%"
+    center
+  >
+    <div class="demo-rate-block">
+      <span class="demonstration">总分10分, 我给它打8.8分, 你打多少分？</span>
+      <el-rate
+        v-model="gameRecord.gameScore"
+        :colors="rateColors"
+        size="large"
+        allow-half
+        :max="5"
+      />
+    </div>
+
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button
+          type="info"
+          @click="cancleDialog"
+        >取消</el-button>
+        <el-button
+          type="primary"
+          @click="putGameScore"
+        >提交</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
-import util from 'src/utils/date'
+import util from "src/utils/date";
 
 export default {
   data() {
     return {
       loading: true,
+      centerDialogVisible: false,
+      rateColors: ["#99A9BF", "#F7BA2A", "#FF9900"],
       paginationInfo: {
         currentPage: 1,
         totalPages: 0,
         hasPrevious: false,
         hasNext: true,
-        totalCount: 10
+        totalCount: 10,
       },
       orderType: {
         active: 0,
         data: [
           {
             id: 0,
-            name: '未使用',
-            value: false
+            name: "未使用",
+            value: false,
           },
           {
             id: 1,
-            name: '已使用',
-            value: true
-          }
-        ]
+            name: "已使用",
+            value: true,
+          },
+        ],
       },
-      sdks: {}
-    }
+      sdks: {},
+      gameRecord: {
+        gameId: 0,
+        gameScore: 0,
+      },
+    };
   },
   methods: {
     formatBuyTime: function (buyTime) {
-      return !buyTime || buyTime == '' ? '' : util.formatDate.format(new Date(buyTime), 'yyyy-MM-dd hh:mm:ss')
+      return !buyTime || buyTime == ""
+        ? ""
+        : util.formatDate.format(new Date(buyTime), "yyyy-MM-dd hh:mm:ss");
     },
     getSDKList() {
-      let hasChecked = this.$route.query.hasChecked
+      let hasChecked = this.$route.query.hasChecked;
       if (!hasChecked) {
-        hasChecked = false
+        hasChecked = false;
       }
       this.$http.get(
-        'v1/g/user/sdks',
+        "v1/g/user/sdks",
         { pageIndex: this.paginationInfo.currentPage, hasChecked: hasChecked },
         (res) => {
-          this.setPaginationInfo(res)
-          this.sdks = res.data
-          this.loading = false
+          this.setPaginationInfo(res);
+          this.sdks = res.data;
+          this.loading = false;
         },
         (fail) => {
-          if (fail.status == 404) {
-            this.paginationInfo.totalCount = 0
-            this.sdks = null
-            this.loading = false
-          }
+          this.paginationInfo.totalCount = 0;
+          this.sdks.length = 0;
+          this.loading = false;
         }
-      )
+      );
     },
     checkSDK(sdkId) {
       this.$http.put(
-        'v1/g/user/sdk/' + sdkId,
+        "v1/g/user/sdk/" + sdkId,
         null,
         (res) => {
-          this.getSDKList()
+          this.$message.success("SDK校验成功");
+          this.getSDKList();
         },
         (fail) => {}
-      )
+      );
     },
     handleCurrentChange() {
-      this.getSDKList()
+      this.getSDKList();
     },
     setPaginationInfo(res) {
-      this.paginationInfo.currentPage = res.currentPage
-      this.paginationInfo.totalPages = res.totalPages
-      this.paginationInfo.totalCount = res.totalCount
-      this.paginationInfo.hasPrevious = res.hasPrevious
-      this.paginationInfo.hasNext = res.hasNext
+      this.paginationInfo.currentPage = res.currentPage;
+      this.paginationInfo.totalPages = res.totalPages;
+      this.paginationInfo.totalCount = res.totalCount;
+      this.paginationInfo.hasPrevious = res.hasPrevious;
+      this.paginationInfo.hasNext = res.hasNext;
     },
     typeSelected(typeId) {
-      this.orderType.active = typeId
-    }
+      this.orderType.active = typeId;
+    },
+    prepareDialog(gameId) {
+      this.$http.get("v1/g/user/score/" + gameId, null, (res) => {
+        this.gameRecord.gameId = res.gameId;
+        this.gameRecord.gameScore = res.gameScore / 2;
+      });
+      this.centerDialogVisible = true;
+    },
+    cancleDialog(gameId) {
+      this.gameRecord.gameId = null;
+      this.gameRecord.gameScore = null;
+      this.centerDialogVisible = false;
+    },
+    putGameScore() {
+      var gameScoreDto = {
+        gameId: this.gameRecord.gameId,
+        gameScore: this.gameRecord.gameScore * 2,
+      };
+      if (gameScoreDto.gameScore === 10) {
+        gameScoreDto.gameScore = 9.5;
+      } else if (gameScoreDto.gameScore === 0) {
+        gameScoreDto.gameScore = 1.0;
+      }
+      console.log(gameScoreDto);
+      this.$http.put(
+        "v1/g/user/score",
+        gameScoreDto,
+        (res) => {
+          this.$message.success("感谢你对游戏的评价 ^ ^");
+          this.getSDKList();
+          this.cancleDialog();
+        },
+        (fail) => {
+          this.$message.error("系统错误, 评分失败");
+        }
+      );
+    },
   },
   mounted() {
-    this.getSDKList()
+    let hasChecked = this.$route.query.hasChecked;
+    if (!hasChecked || hasChecked === "false") {
+      this.orderType.active = 0;
+    } else {
+      this.orderType.active = 1;
+    }
+    this.getSDKList();
   },
   watch: {
     $route(to) {
-      this.getSDKList()
-    }
-  }
-}
+      this.getSDKList();
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -159,12 +278,12 @@ export default {
   font-weight: bold;
 }
 .fhyx_clist_tab a.checked:after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -13px;
   left: 0;
   right: 1;
-  width: 80px;
+  width: 65px;
   height: 6px;
   background-color: #ff3600;
   border-radius: 6px;
@@ -272,5 +391,38 @@ img {
   color: #fff;
   font-weight: bold;
   margin: 20px auto;
+}
+
+.fhyx_clist_li_price .pf {
+  float: right;
+  width: 80px;
+  height: 35px;
+  background-color: white;
+  border-radius: 4px;
+  line-height: 28px;
+  text-align: center;
+  font-size: 16px;
+  color: #6ec449;
+  font-weight: bold;
+  margin: 20px auto;
+}
+
+.demo-rate-block {
+  padding: 10px 0;
+  text-align: center;
+  border-right: solid 1px var(--el-border-color);
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+}
+.demo-rate-block:last-child {
+  border-right: none;
+}
+.demo-rate-block .demonstration {
+  text-align: center;
+  display: block;
+  color: var(--el-text-color-secondary);
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 </style>

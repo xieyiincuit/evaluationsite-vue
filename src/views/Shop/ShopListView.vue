@@ -1,19 +1,38 @@
 <template>
-  <div class="container" v-loading="loading">
+  <div
+    class="container"
+    v-loading="loading"
+  >
     <div class="fhyx_clist">
       <div class="fhyx_clist_tab">
-        <template v-for="type in orderType.data" :key="type.id">
-          <router-link @click="typeSelected(type.id)" :class="{ checked: orderType.active == type.id }"
-                       :to="{ path: '/shop', query: { pageIndex: paginationInfo.currentPage, orderby: type.id } }">
+        <template
+          v-for="type in orderType.data"
+          :key="type.id"
+        >
+          <router-link
+            @click="typeSelected(type.id)"
+            :class="{ checked: orderType.active == type.id }"
+            :to="{ path: '/shop', query: { pageIndex: paginationInfo.currentPage, orderby: type.id } }"
+          >
             {{type.name}}
           </router-link>
         </template>
       </div>
-      <div class="fhyx_clist_c" v-if="shops.length !== 0">
+      <div
+        class="fhyx_clist_c"
+        v-if="shops.length !== 0"
+      >
         <div class="fhyx_clist_ul">
-          <template v-for="shop in shops" :key="shop.id">
-            <router-link :to="`/shop/${shop.id}`" class="fhyx_clist_li" @mouseout="shopSelected(shop.id, shop.gameId)"
-                         :class="{ checked: articePop.active === shop.id }">
+          <template
+            v-for="shop in shops"
+            :key="shop.id"
+          >
+            <router-link
+              :to="`/shop/${shop.id}`"
+              class="fhyx_clist_li"
+              @mouseout="shopSelected(shop.id, shop.gameId)"
+              :class="{ checked: articePop.active === shop.id }"
+            >
               <img :src="`http://localhost:9000/${shop.picture}`">
               <div class="fhyx_clist_li_des">
                 <p class="title">{{shop.gameName}}</p>
@@ -25,7 +44,10 @@
             </router-link>
           </template>
         </div>
-        <div class="fhyx_clist_li_c" v-if="shops !== null">
+        <div
+          class="fhyx_clist_li_c"
+          v-if="shops !== null"
+        >
           <p class="title">{{articePop.data.gameName}}</p>
           <div class="tag">
             <a>抢先体验</a><a>角色扮演</a><a>模拟</a><a>沙盒</a><a>策略角色扮演</a><a>角色动作</a>
@@ -33,8 +55,14 @@
           <div class="c_img">
             <img :src="`http://localhost:9000/${articePop.data.gamePicture}`">
           </div>
-          <p class="article" v-show="articePop.data !== null">推荐的优秀测评：</p>
-          <router-link :to="`/article/${articePop.data.articleId}`" v-show="articePop.data !== null">
+          <p
+            class="article"
+            v-show="articePop.data !== null"
+          >推荐的优秀测评：</p>
+          <router-link
+            :to="`/article/${articePop.data.articleId}`"
+            v-show="articePop.data !== null"
+          >
             <p class="atitle">《{{articePop.data.gameName}}》：{{articePop.data.articleTitle}}</p>
             <p class="adescription">{{articePop.data.articleDescription}}</p>
           </router-link>
@@ -42,19 +70,29 @@
       </div>
       <div class="row mt-3 mb-3">
         <div class="col-sm-12 col-md-10 col-lg-8 d-flex justify-content-sm-center">
-          <el-pagination v-model:currentPage="this.paginationInfo.currentPage" :page-size="8" :background="true" layout="prev, pager, next"
-                         :total="this.paginationInfo.totalCount" @current-change="handleCurrentChange" :hide-on-single-page="true" />
+          <el-pagination
+            v-model:currentPage="this.paginationInfo.currentPage"
+            :page-size="8"
+            :background="true"
+            layout="prev, pager, next"
+            :total="this.paginationInfo.totalCount"
+            @current-change="handleCurrentChange"
+            :hide-on-single-page="true"
+          />
         </div>
       </div>
     </div>
     <template v-if="shops.length === 0">
-      <el-empty :image-size="200" description="没有找到你想要游戏，我们会持续添加的 ^ ^" />
+      <el-empty
+        :image-size="200"
+        description="没有找到你想要游戏，我们会持续添加的 ^ ^"
+      />
     </template>
   </div>
 </template>
 
 <script>
-import util from 'src/utils/date'
+import util from "src/utils/date";
 
 export default {
   data() {
@@ -65,119 +103,123 @@ export default {
         totalPages: 0,
         hasPrevious: false,
         hasNext: true,
-        totalCount: 10
+        totalCount: 10,
       },
       orderType: {
         active: 0,
         data: [
           {
             id: 0,
-            name: '新品'
+            name: "新品",
           },
           {
             id: 1,
-            name: '折扣'
+            name: "折扣",
           },
           {
             id: 2,
-            name: '热销'
-          }
-        ]
+            name: "热销",
+          },
+        ],
       },
       shops: [],
       articles: [],
       articePop: {
         active: 0,
         data: {
-          gameName: '',
-          gamePicture: '',
+          gameName: "",
+          gamePicture: "",
           articleId: null,
-          articleTitle: '',
-          articleDescription: ''
-        }
-      }
-    }
+          articleTitle: "",
+          articleDescription: "",
+        },
+      },
+    };
   },
   methods: {
     formatSellTime: function (sellTime) {
-      return !sellTime || sellTime == '' ? '' : util.formatDate.format(new Date(sellTime), 'yyyy-MM-dd')
+      return !sellTime || sellTime == ""
+        ? ""
+        : util.formatDate.format(new Date(sellTime), "yyyy-MM-dd");
     },
     getShopList() {
-      let orderby = this.$route.query.orderby
+      let orderby = this.$route.query.orderby;
       if (!orderby) {
-        orderby = 0
+        orderby = 0;
       }
       this.$http.get(
-        'v1/s/items',
+        "v1/s/items",
         { pageIndex: this.paginationInfo.currentPage, orderby: orderby },
         (shop) => {
-          this.setPaginationInfo(shop)
-          this.shops = shop.data
-          this.articles = shop.articles
+          this.setPaginationInfo(shop);
+          this.shops = shop.data;
+          this.articles = shop.articles;
 
           //初始化
-          this.articePop.active = shop.data[0].id
-          this.articePop.data.gameName = shop.data[0].gameName
-          this.articePop.data.gamePicture = shop.data[0].gamePicture
-          let article = this.articles.find((x) => x.gameId === shop.data[0].gameId)
-          console.log(article)
+          this.articePop.active = shop.data[0].id;
+          this.articePop.data.gameName = shop.data[0].gameName;
+          this.articePop.data.gamePicture = shop.data[0].gamePicture;
+          let article = this.articles.find(
+            (x) => x.gameId === shop.data[0].gameId
+          );
+          console.log(article);
           if (article == null) {
-            this.articePop.data = null
+            this.articePop.data = null;
           } else {
-            this.articePop.data.articleId = article.articleId
-            this.articePop.data.articleTitle = article.title
-            this.articePop.data.articleDescription = article.description
+            this.articePop.data.articleId = article.articleId;
+            this.articePop.data.articleTitle = article.title;
+            this.articePop.data.articleDescription = article.description;
           }
 
-          this.loading = false
+          this.loading = false;
         },
         (fail) => {
           if (fail.status == 404) {
-            this.paginationInfo.totalCount = 0
-            this.shops = null
-            this.articles = null
-            this.loading = false
+            this.paginationInfo.totalCount = 0;
+            this.shops = null;
+            this.articles = null;
+            this.loading = false;
           }
         }
-      )
+      );
     },
     handleCurrentChange() {
-      this.getShopList()
+      this.getShopList();
     },
     setPaginationInfo(res) {
-      this.paginationInfo.currentPage = res.currentPage
-      this.paginationInfo.totalPages = res.totalPages
-      this.paginationInfo.totalCount = res.totalCount
-      this.paginationInfo.hasPrevious = res.hasPrevious
-      this.paginationInfo.hasNext = res.hasNext
+      this.paginationInfo.currentPage = res.currentPage;
+      this.paginationInfo.totalPages = res.totalPages;
+      this.paginationInfo.totalCount = res.totalCount;
+      this.paginationInfo.hasPrevious = res.hasPrevious;
+      this.paginationInfo.hasNext = res.hasNext;
     },
     typeSelected(typeId) {
-      this.orderType.active = typeId
+      this.orderType.active = typeId;
     },
     shopSelected(shopId, gameId) {
-      this.articePop.active = shopId
-      let article = this.articles.find((x) => x.gameId === gameId)
-      let game = this.shops.find((x) => x.id === shopId)
+      this.articePop.active = shopId;
+      let article = this.articles.find((x) => x.gameId === gameId);
+      let game = this.shops.find((x) => x.id === shopId);
       if (!article) {
-        this.articePop.data = null
+        this.articePop.data = null;
       } else {
-        this.articePop.data.gameName = game.gameName
-        this.articePop.data.gamePicture = game.gamePicture
-        this.articePop.data.articleId = article.articleId
-        this.articePop.data.articleTitle = article.title
-        this.articePop.data.articleDescription = article.description
+        this.articePop.data.gameName = game.gameName;
+        this.articePop.data.gamePicture = game.gamePicture;
+        this.articePop.data.articleId = article.articleId;
+        this.articePop.data.articleTitle = article.title;
+        this.articePop.data.articleDescription = article.description;
       }
-    }
+    },
   },
   mounted() {
-    this.getShopList()
+    this.getShopList();
   },
   watch: {
     $route(to) {
-      this.getShopList()
-    }
-  }
-}
+      this.getShopList();
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -208,7 +250,7 @@ export default {
   font-weight: bold;
 }
 .fhyx_clist_tab a.checked:after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -13px;
   left: 0;
