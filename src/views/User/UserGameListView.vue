@@ -28,7 +28,7 @@
             :key="sdk.id"
           >
             <div class="fhyx_clist_li">
-              <img :src="`http://localhost:9000/${sdk.gamePictrue}`">
+              <img :src="`http://localhost:9000/${sdk.gamePicture}`">
               <div class="fhyx_clist_li_des">
                 <p class="title">{{sdk.gameName}}</p>
                 <p class="content">{{formatBuyTime(sdk.sendTime)}} | SDK:{{sdk.sdkString}}</p>
