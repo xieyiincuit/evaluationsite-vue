@@ -3,7 +3,10 @@
     class="container"
     v-loading="loading"
   >
-    <div class="fhyx_clist">
+    <div
+      class="fhyx_clist"
+      v-if="shops !== null"
+    >
       <div class="fhyx_clist_tab">
         <template
           v-for="type in orderType.data"
@@ -18,10 +21,7 @@
           </router-link>
         </template>
       </div>
-      <div
-        class="fhyx_clist_c"
-        v-if="shops.length !== 0"
-      >
+      <div class="fhyx_clist_c">
         <div class="fhyx_clist_ul">
           <template
             v-for="shop in shops"
@@ -82,10 +82,10 @@
         </div>
       </div>
     </div>
-    <template v-if="shops.length === 0">
+    <template v-if="shops === null">
       <el-empty
         :image-size="200"
-        description="没有找到你想要游戏，我们会持续添加的 ^ ^"
+        description="还没有游戏商品开售，慢慢等待吧 ^ ^"
       />
     </template>
   </div>
@@ -170,7 +170,6 @@ export default {
             this.articePop.data.articleTitle = article.title;
             this.articePop.data.articleDescription = article.description;
           }
-
           this.loading = false;
         },
         (fail) => {

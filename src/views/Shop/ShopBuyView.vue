@@ -134,7 +134,10 @@ export default {
           this.shop = res;
           this.loading = false;
         },
-        (fail) => {}
+        (fail) => {
+          this.shop = null;
+          this.loading = false;
+        }
       );
     },
     buyItem() {
