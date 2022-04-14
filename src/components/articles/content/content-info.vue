@@ -2,7 +2,12 @@
   <div class="Mid_R">
     <div class="Author_column">
       <div class="ac1">
-        <a href="#"><img width="70" height="70" :src="`http://localhost:9000/` + authorInfo.avatar" />
+        <a href="#"
+          ><img
+            width="70"
+            height="70"
+            :src="`http://localhost:9000/` + authorInfo.avatar"
+          />
           <div class="bdr"></div>
         </a>
       </div>
@@ -17,21 +22,33 @@
     </div>
     <div class="Game_column">
       <div class="pingce2">
-        <img width="300" :src="'http://localhost:9000/' + this.gameInfo.roughPic" />
+        <img
+          width="300"
+          :src="'http://localhost:9000/' + this.gameInfo.roughPic"
+        />
         <div class="pc">
           <div class="pc1">
             <div class="pc1_num">
               <div class="pnum n8-5">{{ this.gameInfo.score }}</div>
               <div class="txt1">
-                <router-link :to="`/game/${gameInfo.gameId}`">{{ this.gameInfo.gameName }}</router-link>
+                <router-link :to="`/game/${gameInfo.gameId}`">{{
+                  this.gameInfo.gameName
+                }}</router-link>
               </div>
             </div>
           </div>
           <div class="pc2">
-            <div class="like lk1" v-if="this.gameInfo.suggestion.system != null">
-              <span class="jia">平台: {{ this.gameInfo.suggestion.system }}</span><span class="jia">CPU:
-                {{ this.gameInfo.suggestion.cpu }}</span><span class="jia">显卡: {{ this.gameInfo.suggestion.card }}</span><span class="jia">内存:
-                {{ this.gameInfo.suggestion.memory }}</span>
+            <div
+              class="like lk1"
+              v-if="this.gameInfo.suggestion.system != null"
+            >
+              <span class="jia"
+                >平台: {{ this.gameInfo.suggestion.system }}</span
+              ><span class="jia">CPU: {{ this.gameInfo.suggestion.cpu }}</span
+              ><span class="jia">显卡: {{ this.gameInfo.suggestion.card }}</span
+              ><span class="jia"
+                >内存: {{ this.gameInfo.suggestion.memory }}</span
+              >
               <span class="jia">硬盘: {{ this.gameInfo.suggestion.size }}</span>
             </div>
             <div class="like lk1" v-else>
@@ -42,8 +59,11 @@
             </div>
             <div class="pingtai">支持平台: {{ this.gameInfo.platfrom }}</div>
           </div>
-          <div class="pc3">
-            <router-link :to="`/game/${gameInfo.gameId}`">去购买</router-link>
+          <div class="pc3" v-if="hasShop">
+            <router-link :to="`/shop/${gameInfo.gameId}`">去购买</router-link>
+          </div>
+          <div class="pc3not" v-else>
+            <a href="javascript:void(0);">暂未开售</a>
           </div>
         </div>
       </div>
@@ -53,9 +73,8 @@
 
 <script>
 export default {
-  props: ['authorInfo', 'gameInfo'],
-  setup() {}
-}
+  props: ["authorInfo", "gameInfo", "hasShop"],
+};
 </script>
 
 <style scoped>
@@ -116,7 +135,7 @@ export default {
 
 .Author_column .ac2 div {
   width: 300px;
-  font-family: 'Microsoft YaHei';
+  font-family: "Microsoft YaHei";
 }
 
 .Author_column .ac2 div.tit {
@@ -167,7 +186,8 @@ export default {
 .pingce2 .pc .pc1 {
   width: 300px;
   height: 250px;
-  background: url(http://localhost:9000/articleinfo/commonpic/game_01.png) 0 bottom repeat-x;
+  background: url(http://localhost:9000/articleinfo/commonpic/game_01.png) 0
+    bottom repeat-x;
 }
 
 .pingce2 .pc .pc1 .pc1_num {
@@ -241,7 +261,8 @@ export default {
 }
 
 .pingce2 .pc .pc2 .pingtai {
-  background: url(http://localhost:9000/articleinfo/commonpic/pt.png) 0 13px no-repeat;
+  background: url(http://localhost:9000/articleinfo/commonpic/pt.png) 0 13px
+    no-repeat;
 }
 
 .pingce2 .pc .pc2 .pingtai {
@@ -256,19 +277,31 @@ export default {
 }
 
 .pingce2 .pc .pc3 {
-  background: url(http://localhost:9000/articleinfo/commonpic/buy.png) no-repeat;
-}
-
-.pingce2 .pc .pc3 {
   width: 300px;
   height: 32px;
   line-height: 32px;
   text-align: center;
   color: #ffb9a4;
   font-size: 14px;
+  background: url(http://localhost:9000/articleinfo/commonpic/buy.png) no-repeat;
+}
+
+.pingce2 .pc .pc3not {
+  width: 300px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  color: #434241;
+  font-size: 14px;
+  background: url(http://localhost:9000/articleinfo/commonpic/buy.png) no-repeat;
 }
 
 .pingce2 .pc .pc3 a {
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+}
+.pingce2 .pc .pc3not a {
   color: #fff;
   font-size: 16px;
   font-weight: bold;

@@ -1,7 +1,8 @@
 <template>
   <div class="Mid_N">
     <div class="Midnav">
-      <a href="javascript:;" class="a a1 cur"><i></i>
+      <a href="javascript:;" class="a a1 cur"
+        ><i></i>
         <p>综合</p>
       </a>
     </div>
@@ -11,7 +12,11 @@
       <div class="YXXX">
         <div class="YXXX-L">
           <a>
-            <img :src="`http://localhost:9000/${gameInfo.roughImg}`" width="150" height="210"></a>
+            <img
+              :src="`http://localhost:9000/${gameInfo.roughImg}`"
+              width="150"
+              height="210"
+          /></a>
         </div>
         <div class="YXXX-R">
           <div class="Name">
@@ -19,13 +24,18 @@
           </div>
           <div class="div2">
             <div class="win">
-              <template v-for="(plat,index) in supportPlatForm" :key="index">
-                <a href="javascript:;" v-if="index % 2 != 0" class="PC cur">{{ plat }}</a>
+              <template v-for="(plat, index) in supportPlatForm" :key="index">
+                <a href="javascript:;" v-if="index % 2 != 0" class="PC cur">{{
+                  plat
+                }}</a>
                 <a href="javascript:;" v-else>{{ plat }}</a>
               </template>
             </div>
             <div class="bdr">|</div>
-            <div class="clock">暂未开售</div>
+            <div class="clock" v-if="!hasShop">暂未开售</div>
+            <div class="clocknot" v-else>
+              <router-link :to="`/shop/${gameInfo.gameId}`">热销中</router-link>
+            </div>
           </div>
           <div class="div3">
             <div class="tt1">
@@ -69,29 +79,43 @@
           <div class="qzcmt-cont">
             <div class="qzcmt-head">
               <a href="javascript:;" class="userlink">
-                <img :src="
+                <img
+                  :src="
                     'http://localhost:9000/' + findUserAvatar(article.authorId)
-                  " />
+                  "
+                />
               </a>
             </div>
             <div class="qzcmt-cont-top">
               <div class="qzcmt-user">
-                <div class="user-name"><a class="uname" href="javascript:void(0);">{{ findUserName(article.authorId) }}</a></div>
+                <div class="user-name">
+                  <a class="uname" href="javascript:void(0);">{{
+                    findUserName(article.authorId)
+                  }}</a>
+                </div>
               </div>
             </div>
             <div class="qzcmt-content">
               <div class="qzcmt-content-tit">
-                <router-link :to="`/article/${article.articleId}`">{{ article.title }}</router-link>
+                <router-link :to="`/article/${article.articleId}`">{{
+                  article.title
+                }}</router-link>
               </div>
               <div class="qzcmt-content-txt">
-                <router-link :to="`/article/${article.articleId}`">{{ article.description }}</router-link>
+                <router-link :to="`/article/${article.articleId}`">{{
+                  article.description
+                }}</router-link>
               </div>
             </div>
             <div class="qzcmt-action">
               <div class="time">{{ formatCreateTime(article.createTime) }}</div>
               <div class="handle">
-                <a href="javascript:;" class="evt-reply">{{ article.commentsCount }}</a>
-                <a href="javascript:;" class="evt-digg">{{ article.supportCount }}</a>
+                <a href="javascript:;" class="evt-reply">{{
+                  article.commentsCount
+                }}</a>
+                <a href="javascript:;" class="evt-digg">{{
+                  article.supportCount
+                }}</a>
                 <a href="javascript:;" class="evt-noDigg">0</a>
               </div>
             </div>
@@ -99,39 +123,46 @@
         </template>
       </div>
       <template v-else>
-        <el-empty :image-size="200" description="咱们的测评人员偷懒了，我赶紧催他们！！" />
+        <el-empty
+          :image-size="200"
+          description="咱们的测评人员偷懒了，我赶紧催他们！！"
+        />
       </template>
     </div>
   </div>
 </template>
 
 <script>
-import util from '../../../utils/date'
+import util from "../../../utils/date";
 
 export default {
-  props: ['gameInfo', 'articlesInfo'],
+  props: ["gameInfo", "articlesInfo", "hasShop"],
   methods: {
     formatSellTime: function (sellTime) {
-      return !sellTime || sellTime == '' ? '' : util.formatDate.format(new Date(sellTime), 'yyyy-MM-dd')
+      return !sellTime || sellTime == ""
+        ? ""
+        : util.formatDate.format(new Date(sellTime), "yyyy-MM-dd");
     },
     formatCreateTime: function (createTime) {
-      return !createTime || createTime == '' ? '' : util.formatDate.format(new Date(createTime), 'yyyy-MM-dd hh:mm')
+      return !createTime || createTime == ""
+        ? ""
+        : util.formatDate.format(new Date(createTime), "yyyy-MM-dd hh:mm");
     },
     findUserName: function (userId) {
-      var user = this.articlesInfo.userInfo.find((o) => o.id === userId)
-      return user.nickName == null ? '匿名用户' : user.nickName
+      var user = this.articlesInfo.userInfo.find((o) => o.id === userId);
+      return user.nickName == null ? "匿名用户" : user.nickName;
     },
     findUserAvatar: function (userId) {
-      var user = this.articlesInfo.userInfo.find((o) => o.id === userId)
-      return user.avatar == null ? '' : user.avatar
-    }
+      var user = this.articlesInfo.userInfo.find((o) => o.id === userId);
+      return user.avatar == null ? "" : user.avatar;
+    },
   },
   computed: {
     supportPlatForm() {
-      return this.gameInfo.platForm.split('/')
-    }
-  }
-}
+      return this.gameInfo.platForm.split("/");
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -307,10 +338,6 @@ a {
 }
 
 .YXXX-R .div2 div.clock {
-  background: url(http://localhost:9000/gameinfopic/common/clock.png) 0 center no-repeat;
-}
-
-.YXXX-R .div2 div.clock {
   padding-top: 5px;
   height: 26px;
   line-height: 26px;
@@ -318,6 +345,24 @@ a {
   font-size: 16px;
   font-weight: bold;
   text-indent: 25px;
+  background: url(http://localhost:9000/gameinfopic/common/clock.png) 0 center
+    no-repeat;
+}
+
+.YXXX-R .div2 div.clocknot {
+  padding-top: 5px;
+  height: 26px;
+  line-height: 26px;
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+  text-indent: 25px;
+  background: url(http://localhost:9000/gameinfopic/common/clock.png) 0 center
+    no-repeat;
+}
+
+.YXXX-R .div2 div.clocknot a {
+  color: red;
 }
 
 .YXXX-R .div3 {
@@ -462,7 +507,7 @@ li {
 .qzcmt {
   padding: 4px 0;
   font-size: 14px;
-  font-family: 'Microsoft YaHei', Arial, SimSun;
+  font-family: "Microsoft YaHei", Arial, SimSun;
   background-color: #fff;
   border-radius: 4px;
   overflow: visible;
@@ -542,7 +587,7 @@ li {
   line-height: 28px;
   color: #222;
   font-size: 16px;
-  font-family: 'Microsoft YaHei';
+  font-family: "Microsoft YaHei";
   vertical-align: middle;
   font-weight: bold;
 }

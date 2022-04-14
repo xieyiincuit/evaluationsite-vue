@@ -3,111 +3,125 @@
     <banner :bannerInfo="bannerInfo" />
     <div class="Mid">
       <content :content="content" />
-      <info :authorInfo="authorInfo" :gameInfo="gameInfo" />
+      <info :authorInfo="authorInfo" :gameInfo="gameInfo" :hasShop="hasShop" />
     </div>
   </div>
 </template>
 
 <script>
-import banner from '../../components/articles/content/content-banner.vue'
-import content from '../../components/articles/content/content-main.vue'
-import info from '../../components/articles/content/content-info.vue'
+import banner from "../../components/articles/content/content-banner.vue";
+import content from "../../components/articles/content/content-main.vue";
+import info from "../../components/articles/content/content-info.vue";
 
 export default {
   components: {
     banner,
     content,
-    info
+    info,
   },
   data() {
     return {
       loading: true,
-      content: '',
+      content: "",
       bannerInfo: {
-        gameName: '',
+        gameName: "",
         createTime: null,
         updateTime: null,
-        title: '',
+        title: "",
         commentsCount: 0,
-        articleImage: ''
+        articleImage: "",
       },
       authorInfo: {
-        userId: '',
-        author: '',
-        avatar: '',
-        introduction: ''
+        userId: "",
+        author: "",
+        avatar: "",
+        introduction: "",
       },
       gameInfo: {
         gameId: 0,
-        gameName: '',
+        gameName: "",
         score: 0,
-        roughPic: '',
-        platfrom: '',
+        roughPic: "",
+        platfrom: "",
         suggestion: {
-          cpu: '',
-          card: '',
-          memory: '',
-          size: '',
-          system: ''
-        }
-      }
-    }
+          cpu: "",
+          card: "",
+          memory: "",
+          size: "",
+          system: "",
+        },
+      },
+      hasShop: false,
+    };
   },
   methods: {
     getArticle() {
-      const articleId = this.$route.params.aid
+      const articleId = this.$route.params.aid;
 
       this.$http.get(`v1/e/article/${articleId}`, null, (res) => {
-        this.content = res.content
-        this.setBannerInfo(res)
+        this.content = res.content;
+        this.setBannerInfo(res);
 
         this.$http.get(`v1/u/author`, { userId: res.userId }, (authorInfo) => {
-          this.setAuthorInfo(authorInfo)
-        })
+          this.setAuthorInfo(authorInfo);
+        });
 
         this.$http.get(`v1/g/info/${res.gameId}`, null, (game) => {
-          this.setGameInfo(game)
-          this.$http.get('v1/g/suggestion', { gameId: res.gameId }, (sug) => {
-            this.setSuggestion(sug)
-          })
-        })
-      })
-      this.loading = false
+          this.setGameInfo(game);
+
+          this.$http.get(
+            "v1/s/" + res.gameId,
+            null,
+            (res) => {
+              this.hasShop = true;
+            },
+            (fail) => {
+              this.hasShop = false;
+            }
+          );
+
+          this.$http.get("v1/g/suggestion", { gameId: res.gameId }, (sug) => {
+            this.setSuggestion(sug);
+          });
+        });
+      });
+      this.loading = false;
     },
     setAuthorInfo(authorDto) {
-      this.authorInfo.userId = authorDto.userId
-      this.authorInfo.author = authorDto.nickName
-      this.authorInfo.avatar = authorDto.avatar
-      this.authorInfo.introduction = authorDto.introduction
+      this.authorInfo.userId = authorDto.userId;
+      this.authorInfo.author = authorDto.nickName;
+      this.authorInfo.avatar = authorDto.avatar;
+      this.authorInfo.introduction = authorDto.introduction;
     },
     setGameInfo(game) {
-      this.gameInfo.gameId = game.id
-      this.gameInfo.gameName = game.name
-      this.gameInfo.score = game.averageScore
-      this.gameInfo.roughPic = game.roughPicture
-      this.gameInfo.platfrom = game.supportPlatform
+      this.gameInfo.gameId = game.id;
+      this.gameInfo.gameName = game.name;
+      this.gameInfo.score = game.averageScore;
+      this.gameInfo.roughPic = game.roughPicture;
+      this.gameInfo.platfrom = game.supportPlatform;
     },
     setSuggestion(sug) {
-      this.gameInfo.suggestion.cpu = sug.cpuName
-      this.gameInfo.suggestion.card = sug.graphicsCard
-      this.gameInfo.suggestion.system = sug.operationSystem
-      this.gameInfo.suggestion.size = sug.diskSize + 'G'
-      this.gameInfo.suggestion.memory = sug.memorySize + 'GB'
+      this.gameInfo.suggestion.cpu = sug.cpuName;
+      this.gameInfo.suggestion.card = sug.graphicsCard;
+      this.gameInfo.suggestion.system = sug.operationSystem;
+      this.gameInfo.suggestion.size = sug.diskSize + "G";
+      this.gameInfo.suggestion.memory = sug.memorySize + "GB";
     },
     setBannerInfo(article) {
-      this.bannerInfo.gameName = article.gameName
-      this.bannerInfo.createTime = article.createTime
-      this.bannerInfo.updateTime = article.updateTime
-      this.bannerInfo.title = article.title
-      this.bannerInfo.commentsCount = article.commentsCount
-      this.bannerInfo.joinCount = article.joinCount
-      this.bannerInfo.articleImage = 'http://localhost:9000/' + article.articleImage
-    }
+      this.bannerInfo.gameName = article.gameName;
+      this.bannerInfo.createTime = article.createTime;
+      this.bannerInfo.updateTime = article.updateTime;
+      this.bannerInfo.title = article.title;
+      this.bannerInfo.commentsCount = article.commentsCount;
+      this.bannerInfo.joinCount = article.joinCount;
+      this.bannerInfo.articleImage =
+        "http://localhost:9000/" + article.articleImage;
+    },
   },
   mounted() {
-    this.getArticle()
-  }
-}
+    this.getArticle();
+  },
+};
 </script>
 
 <style scoped>
