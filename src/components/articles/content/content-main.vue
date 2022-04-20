@@ -3,6 +3,9 @@
     <div class="MidLcon">
       <span v-html="content"></span>
     </div>
+    <a class="gs_zan supportMe" style="cursor: pointer" @click="supportArticle">
+      <i></i><span>{{ showCorrectSupport }}</span>
+    </a>
     <div class="remark">
       <div class="MidLtit">
         <div class="tit">玩家点评</div>
@@ -61,9 +64,16 @@
                 <div class="remark-action">
                   <div class="remark-action-btn">
                     <a href="javascript:;" class="remark-reply">
-                      <span class="t1" v-show="IsMyself(comment.userId)"
-                        >举报|</span
+                      <el-popconfirm
+                        title="举报该用户的言论？"
+                        @confirm="banUser(comment.userId)"
                       >
+                        <template #reference>
+                          <span class="t1" v-show="!IsMyself(comment.userId)"
+                            >举报|</span
+                          >
+                        </template>
+                      </el-popconfirm>
                       <span
                         class="t2"
                         @click="
@@ -72,6 +82,16 @@
                       >
                         回复</span
                       >
+                      <el-popconfirm
+                        title="删除你的评论？"
+                        @confirm="deleteComment(comment.commentId)"
+                      >
+                        <template #reference>
+                          <span class="t2" v-show="IsMyself(comment.userId)">
+                            |删除</span
+                          >
+                        </template>
+                      </el-popconfirm>
                     </a>
                   </div>
                 </div>
@@ -116,15 +136,22 @@
                               <span class="floor-con">{{ reply.content }}</span>
                             </div>
                             <div class="floor-action">
-                              <span class="report">
-                                <a
-                                  href="javascript:;"
-                                  class="report-btn"
-                                  v-show="IsMyself(reply.userId)"
-                                  >举报</a
-                                >
-                                <i v-show="IsMyself(reply.userId)"> | </i>
-                              </span>
+                              <el-popconfirm
+                                title="举报该用户的言论？"
+                                @confirm="banUser(reply.userId)"
+                              >
+                                <template #reference>
+                                  <span class="report">
+                                    <a
+                                      href="javascript:;"
+                                      class="report-btn"
+                                      v-show="!IsMyself(reply.userId)"
+                                      >举报</a
+                                    >
+                                    <i v-show="!IsMyself(reply.userId)"> | </i>
+                                  </span>
+                                </template>
+                              </el-popconfirm>
                               <a
                                 href="javascript:;"
                                 class="btn-reply"
@@ -137,6 +164,21 @@
                                 "
                                 >回复</a
                               >
+                              <i>| </i>
+                              <el-popconfirm
+                                title="删除你的回复？"
+                                @confirm="deleteComment(reply.commentId)"
+                              >
+                                <template #reference>
+                                  <a
+                                    href="javascript:;"
+                                    class="btn-reply"
+                                    v-show="IsMyself(reply.userId)"
+                                    >删除</a
+                                  >
+                                </template>
+                              </el-popconfirm>
+
                               <i>| </i>
                               <span class="remark-time">{{
                                 formatTime(reply.createTime)
@@ -190,7 +232,7 @@ import util from "../../../utils/date";
 import applicationUserManager from "~/auth/applicationusermanager";
 
 export default {
-  props: ["content"],
+  props: ["content", "supportCount"],
   data() {
     return {
       loading: true,
@@ -198,6 +240,7 @@ export default {
       comments: [],
       commentUser: [],
       subCommentUser: [],
+      localSupport: 0,
       commentPost: {
         articleId: 0,
         rootId: 0,
@@ -227,6 +270,13 @@ export default {
     role() {
       return this.$store.state.identity.role;
     },
+    showCorrectSupport() {
+      if (this.localSupport === 0) {
+        return this.supportCount;
+      } else {
+        return this.localSupport;
+      }
+    },
   },
   methods: {
     formatTime: function (dateTime) {
@@ -252,7 +302,7 @@ export default {
       if (this.user == null) {
         return true;
       }
-      return userId !== this.user.sub;
+      return userId === this.user.sub;
     },
     async login() {
       try {
@@ -261,6 +311,50 @@ export default {
         console.log("login error: ", error);
         this.$message.error(error);
       }
+    },
+    supportArticle() {
+      let likeAddDto = {
+        articleId: this.$route.params.aid,
+      };
+      this.localSupport = this.supportCount + 1;
+      this.$http.post(
+        "v1/e/like",
+        likeAddDto,
+        (res) => {
+          this.$message.success(res);
+        },
+        (fail) => {
+          this.$message.error("点赞文章失败，系统错误 - -");
+        }
+      );
+    },
+    deleteComment(commentId) {
+      this.$http.delete(
+        "v1/e/article/comments/" + commentId,
+        null,
+        (res) => {
+          this.$message.success("评论删除成功 ^ ^");
+          this.getComment();
+        },
+        (fail) => {
+          this.$message.error("删除评论失败，系统错误 - -");
+        }
+      );
+    },
+    banUser(userId) {
+      let addDto = {
+        userId: userId,
+      };
+      this.$http.post(
+        "v1/b/banned",
+        addDto,
+        (res) => {
+          this.$message.success("举报该用户成功 ^ ^");
+        },
+        (fail) => {
+          this.$message.error("不要重复举报别人 - -");
+        }
+      );
     },
     cmtSubmit() {
       if (this.commentPost.content === "") {
@@ -733,6 +827,35 @@ a {
   color: #fff;
   font-size: 17px;
   font-family: "Microsoft YaHei";
+  text-align: center;
+}
+
+.gs_zan {
+  display: block;
+  margin: 0 auto 10px;
+  background-image: url(http://localhost:9000/articleinfo/commonpic/csprite.png);
+  background-position: -79px 0;
+  width: 75px;
+  height: 75px;
+}
+.gs_zan :hover {
+  display: block;
+  margin: 0 auto 10px;
+  background-image: url(http://localhost:9000/articleinfo/commonpic/csprite.png);
+  background-position: 0 0;
+  width: 75px;
+  height: 60px;
+}
+
+.gs_zan span {
+  display: block;
+  padding-top: 18px;
+  width: 100%;
+  height: 22px;
+  line-height: 22px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 700;
   text-align: center;
 }
 </style>

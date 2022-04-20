@@ -20,10 +20,21 @@
             name="avatar"
           >
             <img
-              :src="'http://localhost:9000/' +userForm.avatar "
+              :src="'http://localhost:9000/' + userForm.avatar"
               class="avatar"
             />
-            <div class="rounded-2 color-fg-default px-2 py-1 left-0 bottom-0 ml-2 mb-2">
+            <div
+              class="
+                rounded-2
+                color-fg-default
+                px-2
+                py-1
+                left-0
+                bottom-0
+                ml-2
+                mb-2
+              "
+            >
               <svg
                 aria-hidden="true"
                 height="16"
@@ -36,40 +47,30 @@
                 <path
                   fill-rule="evenodd"
                   d="M11.013 1.427a1.75 1.75 0 012.474 0l1.086 1.086a1.75 1.75 0 010 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 01-.927-.928l.929-3.25a1.75 1.75 0 01.445-.758l8.61-8.61zm1.414 1.06a.25.25 0 00-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 000-.354l-1.086-1.086zM11.189 6.25L9.75 4.81l-6.286 6.287a.25.25 0 00-.064.108l-.558 1.953 1.953-.558a.249.249 0 00.108-.064l6.286-6.286z"
-                >
-                </path>
+                ></path>
               </svg>
               点击上传
             </div>
           </el-upload>
         </el-form-item>
         <el-row>
-          <el-form-item
-            label="姓名："
-            prop="nickName"
-          >
+          <el-form-item label="姓名：" prop="nickName">
             <el-col :span="18">
-              <el-input
-                v-model="userForm.nickName"
-                maxlength="30"
-              />
+              <el-input v-model="userForm.nickName" maxlength="30" />
             </el-col>
-            <el-col :span="1">
-            </el-col>
+            <el-col :span="1"> </el-col>
             <el-col :span="5">
               <el-button
                 type="success"
                 plain
                 @click="checkNickName"
                 v-if="checkChangeName"
-              >验证</el-button>
+                >验证</el-button
+              >
             </el-col>
           </el-form-item>
         </el-row>
-        <el-form-item
-          label="个人简介："
-          prop="introduction"
-        >
+        <el-form-item label="个人简介：" prop="introduction">
           <el-input
             v-model="userForm.introduction"
             type="textarea"
@@ -92,10 +93,9 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            @click="submitForm('userForm')"
-          >保存</el-button>
+          <el-button type="primary" @click="submitForm('userForm')"
+            >保存</el-button
+          >
         </el-form-item>
       </el-form>
     </el-tab-pane>
@@ -107,13 +107,9 @@
         ref="resetForm"
         :rules="resetRules"
       >
-        <el-form-item>
-        </el-form-item>
+        <el-form-item> </el-form-item>
         <el-row mt-3>
-          <el-form-item
-            label="旧密码："
-            prop="oldpass"
-          >
+          <el-form-item label="旧密码：" prop="oldpass">
             <el-input
               maxlength="30"
               type="password"
@@ -123,10 +119,7 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item
-            label="新密码："
-            prop="newpass"
-          >
+          <el-form-item label="新密码：" prop="newpass">
             <el-input
               maxlength="30"
               type="password"
@@ -136,11 +129,7 @@
           </el-form-item>
         </el-row>
         <el-row class="mt-5">
-          <el-form-item
-            label="确认密码："
-            prop="checkPass"
-            autocomplete="off"
-          >
+          <el-form-item label="确认密码：" prop="checkPass" autocomplete="off">
             <el-input
               maxlength="30"
               type="password"
@@ -150,10 +139,9 @@
           </el-form-item>
         </el-row>
         <el-form-item>
-          <el-button
-            type="primary"
-            @click="submitForm('resetForm')"
-          >重设</el-button>
+          <el-button type="primary" @click="submitForm('resetForm')"
+            >重设</el-button
+          >
         </el-form-item>
       </el-form>
     </el-tab-pane>

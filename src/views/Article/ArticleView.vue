@@ -2,7 +2,7 @@
   <div class="container-fluid" v-loading="loading">
     <banner :bannerInfo="bannerInfo" />
     <div class="Mid">
-      <content :content="content" />
+      <content :content="content" :supportCount="supportCount" />
       <info :authorInfo="authorInfo" :gameInfo="gameInfo" :hasShop="hasShop" />
     </div>
   </div>
@@ -23,12 +23,14 @@ export default {
     return {
       loading: true,
       content: "",
+      supportCount: 0,
       bannerInfo: {
         gameName: "",
         createTime: null,
         updateTime: null,
         title: "",
         commentsCount: 0,
+        supportCount: 0,
         articleImage: "",
       },
       authorInfo: {
@@ -60,6 +62,7 @@ export default {
 
       this.$http.get(`v1/e/article/${articleId}`, null, (res) => {
         this.content = res.content;
+        this.supportCount = res.supportCount;
         this.setBannerInfo(res);
 
         this.$http.get(`v1/u/author`, { userId: res.userId }, (authorInfo) => {
