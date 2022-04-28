@@ -378,7 +378,11 @@ export default {
             this.getComment();
           },
           (fail) => {
-            this.$message.error("发表评论失败，系统错误 - -");
+            if (fail === 403) {
+              this.$message.error("你的账号状态异常，禁止评论");
+            } else {
+              this.$message.error("发表评论失败，系统错误 - -");
+            }
           }
         );
       } else if (this.commentPost.isReply) {
@@ -399,7 +403,11 @@ export default {
             this.getComment();
           },
           (fail) => {
-            this.$message.error("回复失败，系统错误 - -");
+            if (fail === 403) {
+              this.$message.error("你的账号状态异常，禁止评论");
+            } else {
+              this.$message.error("回复评论失败，系统错误 - -");
+            }
           }
         );
       }

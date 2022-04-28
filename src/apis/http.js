@@ -61,6 +61,8 @@ axios.interceptors.response.use(
                     window.localStorage.removeItem("USER_EXP");
                     window.localStorage.removeItem("ACCESS_TOKEN");
                     applicationUserManager.login();
+                case 403:
+                    return Promise.reject(error.response.status);
             }
         }
         return Promise.reject(error.response.data); // 返回接口返回的错误信息
